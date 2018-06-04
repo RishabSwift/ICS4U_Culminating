@@ -17,7 +17,7 @@ public class Boss extends MovingObject {
 	ArrayList<Bullet> bullet = new  ArrayList<Bullet>();
 	ArrayList<Laser> laser = new  ArrayList<Laser>();
 	int timeCount = 0;
-	
+
 
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
@@ -170,7 +170,7 @@ public class Boss extends MovingObject {
 
 	public void atk2(int projectileType, double tx, double ty, boolean bounce) {
 		if (projectileType == 1) {
-			
+
 			Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
 			double xdist = tx-x;
 			double ydist = ty-y;
@@ -180,7 +180,7 @@ public class Boss extends MovingObject {
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-			
+
 			bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
 			xdist = tx-x + 20;
 			ydist = ty-y;
@@ -190,7 +190,7 @@ public class Boss extends MovingObject {
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-			
+
 			bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
 			xdist = tx-x - 20;
 			ydist = ty-y;
@@ -200,7 +200,7 @@ public class Boss extends MovingObject {
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-			
+
 		}
 		else {
 
@@ -213,19 +213,25 @@ public class Boss extends MovingObject {
 		double ydist = ty-y;
 		double m = ydist/xdist;
 		double k = 0;
-		boolean edge = false;
-		while (!edge) {
-			if (k * xdist <=  0 || k * xdist >=  right) {
-				edge = true;
-			}
-			else {
-				k++;
-			}
+		double angle = Math.toDegrees(Math.atan(m));
+		double endx = 0;
+		double endy = 0;
+		angle += 90;
+		if (ydist > 0) {
+			angle += 180;
 		}
-		
-		Laser l = new Laser(x,y,x + (xdist), y + + (ydist), 20, this.color);
+		if (xdist > 0 ) {
+			endx = x + 10000 * Math.cos(angle);
+			endy = y + 10000 * Math.sin(angle);
+		}
+		else if (xdist < 0) {
+			endx = x - 10000 * Math.sin(angle);
+			endy = y - 10000 * Math.sin(angle);
+		}
+
+		Laser l = new Laser(x,y,endx, endy, 20, this.color);
 		laser.add(l);
-		
+
 	}
 
 

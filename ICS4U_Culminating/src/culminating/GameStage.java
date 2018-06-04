@@ -279,6 +279,12 @@ public class GameStage extends Stage {
                 p.dead = true;
             }
         }
+        // boss bullet hits player
+        for (int i = 0; i < b.laser.size(); i++) {
+        	if (b.laser.get(i).fire) {
+        		b.laser.remove(i);
+        	}
+        }
         //player hits boss
     }
 

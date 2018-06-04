@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
     public static String GAME_NAME = "The Best Singerss";
-    public static int GAME_WIDTH = 1050;
-    public static int GAME_HEIGHT = 800;
+    public static int GAME_WIDTH = 1800;
+    public static int GAME_HEIGHT = 1000;
 
     public static void main(String[] args) {
     	launch(args);
