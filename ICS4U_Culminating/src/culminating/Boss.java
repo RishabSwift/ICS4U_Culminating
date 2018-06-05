@@ -17,7 +17,9 @@ public class Boss extends MovingObject {
 	ArrayList<Bullet> bullet = new  ArrayList<Bullet>();
 	ArrayList<Laser> laser = new  ArrayList<Laser>();
 	int timeCount = 0;
-
+	double angle;
+	double xdist;
+	double ydist;
 
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
@@ -55,6 +57,18 @@ public class Boss extends MovingObject {
 		int drawY = (int) cy;
 		gc.setFill(color);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
+
+		gc.setStroke(color.BLACK);
+		gc.setLineWidth(5);
+		gc.strokeLine(x, y, x + 10000, y);
+		gc.strokeLine(x, y, x - 10000, y);
+		gc.strokeLine(x, y, x, y + 10000);
+		gc.strokeLine(x, y, x, y - 10000);
+		gc.setFill(Color.BLACK);
+		gc.fillText("" + this.angle , 10, 10);
+		gc.fillText("" + this.xdist , 10, 30);
+		gc.fillText("" + this.ydist , 10, 50);
+
 	}
 
 	public void behavior(double playerX, double playerY) {
@@ -62,7 +76,7 @@ public class Boss extends MovingObject {
 		if (timeCount == 100) {
 			atkBehavior(playerX, playerY);		
 			timeCount = 0;
-			//movtBehavior(playerX, playerY);
+			movtBehavior(playerX, playerY);
 		}
 	}
 
@@ -209,26 +223,21 @@ public class Boss extends MovingObject {
 	}
 	public void atk3(double tx, double ty) {
 		//line laser
-		double xdist = tx-x;
-		double ydist = ty-y;
+		xdist = tx-x;
+		ydist = ty-y;
 		double m = ydist/xdist;
-		double k = 0;
-		double angle = Math.toDegrees(Math.atan(m));
+		angle = Math.toDegrees(Math.atan(m));
 		double endx = 0;
 		double endy = 0;
-		angle += 90;
-		if (ydist > 0) {
+		if (angle < 0) {
+			angle += 360;
+		}
+		if (xdist < 0) {
 			angle += 180;
 		}
-		if (xdist > 0 ) {
-			endx = x + 10000 * Math.cos(angle);
-			endy = y + 10000 * Math.sin(angle);
-		}
-		else if (xdist < 0) {
-			endx = x - 10000 * Math.sin(angle);
-			endy = y - 10000 * Math.sin(angle);
-		}
-
+		endx = x + 10000 * Math.cos(Math.toRadians(angle));
+		endy = y + 10000 * Math.sin(Math.toRadians(angle));
+		
 		Laser l = new Laser(x,y,endx, endy, 20, this.color);
 		laser.add(l);
 
