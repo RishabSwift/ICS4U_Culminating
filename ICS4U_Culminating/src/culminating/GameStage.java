@@ -44,7 +44,7 @@ public class GameStage extends Stage {
 	Barrier barrier = new Barrier();
 	boolean finished = false;
 	boolean isBarrierCreated = false, isBarrierBeingCreated = false;
-	
+
     Timer t = new Timer();
 
 	GameStage() {
@@ -155,7 +155,6 @@ public class GameStage extends Stage {
             if (!isBarrierCreated && isBarrierBeingCreated) {
                 t.startTimer();
                 isBarrierCreated = true;
-                System.out.println("start timer");
                 isBarrierBeingCreated = false;
             }
 
@@ -169,10 +168,12 @@ public class GameStage extends Stage {
             @Override
             public void run() {
                 while (!finished) {
+
                     if (isBarrierCreated) {
                         if (t.hasBeenSeconds(3)) {
                             isBarrierCreated = false;
                             isBarrierBeingCreated = false;
+                            barrier.clear();
                         }
                     }
                     if (p.dead) {
