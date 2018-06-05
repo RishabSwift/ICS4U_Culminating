@@ -17,9 +17,9 @@ public class Boss extends MovingObject {
 	ArrayList<Bullet> bullet = new  ArrayList<Bullet>();
 	ArrayList<Laser> laser = new  ArrayList<Laser>();
 	int timeCount = 0;
-	double angle;
-	double xdist;
-	double ydist;
+	int coneCount = 0;
+	boolean laserAtk = false;
+	boolean coneAtk = false;
 
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
@@ -58,16 +58,14 @@ public class Boss extends MovingObject {
 		gc.setFill(color);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
 
-		gc.setStroke(color.BLACK);
-		gc.setLineWidth(5);
-		gc.strokeLine(x, y, x + 10000, y);
-		gc.strokeLine(x, y, x - 10000, y);
-		gc.strokeLine(x, y, x, y + 10000);
-		gc.strokeLine(x, y, x, y - 10000);
-		gc.setFill(Color.BLACK);
-		gc.fillText("" + this.angle , 10, 10);
-		gc.fillText("" + this.xdist , 10, 30);
-		gc.fillText("" + this.ydist , 10, 50);
+		//		gc.setStroke(color.BLACK);
+		//		gc.setLineWidth(5);
+		//		gc.strokeLine(x, y, x + 10000, y);
+		//		gc.strokeLine(x, y, x - 10000, y);
+		//		gc.strokeLine(x, y, x, y + 10000);
+		//		gc.strokeLine(x, y, x, y - 10000);
+
+
 
 	}
 
@@ -83,12 +81,12 @@ public class Boss extends MovingObject {
 	public void movtBehavior(double playerX, double playerY) {
 		switch 	(stgNum) {
 		case 1:
-			move1();
+			//move1();
 			//standard move and attack
 			return;
 		case 2:
 			//bouncer
-			move1();
+			//move1();
 			return;
 		case 3:
 			//sniper
@@ -106,8 +104,8 @@ public class Boss extends MovingObject {
 	public void atkBehavior(double playerX, double playerY) {
 		switch 	(stgNum) {
 		case 1:
-			atk3(playerX, playerY);
-			//atk2(1, playerX, playerY, false);
+			//atk3(playerX, playerY);
+			atk2(2, playerX, playerY, 20, 10, false);
 			//standard attack
 			return;
 		case 2:
@@ -182,7 +180,12 @@ public class Boss extends MovingObject {
 		}
 	}
 
-	public void atk2(int projectileType, double tx, double ty, boolean bounce) {
+	public void atk2(int projectileType, double tx, double ty, int shots, double anglewidth, boolean bounce) {
+		if (!coneAtk) {
+			coneCount = shots;
+		}
+		coneAtk = true;
+
 		if (projectileType == 1) {
 
 			Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
@@ -194,39 +197,38 @@ public class Boss extends MovingObject {
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-
-			bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-			xdist = tx-x + 20;
-			ydist = ty-y;
-			dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
-			cycleNum = (int) dist/10;
-			bu.setXSpeed(xdist/cycleNum);
-			bu.setYSpeed(ydist/cycleNum);
-			bu.color = color;
-			bullet.add(bu);
-
-			bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-			xdist = tx-x - 20;
-			ydist = ty-y;
-			dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
-			cycleNum = (int) dist/10;
-			bu.setXSpeed(xdist/cycleNum);
-			bu.setYSpeed(ydist/cycleNum);
-			bu.color = color;
-			bullet.add(bu);
-
 		}
 		else {
+			coneCount--;
+			double xdist = tx-x;
+			double ydist = ty-y;
+			double m = ydist/xdist;
+			double angle = Math.toDegrees(Math.atan(m));
+			double endx = 0;
+			double endy = 0;
+			if (angle < 0) {
+				angle += 360;
+			}
+			if (xdist < 0) {
+				angle += 180;
+			}
+			angle += (Math.random()*anglewidth) - anglewidth/2;
 
+			endx = x + 10000 * Math.cos(Math.toRadians(angle));
+			endy = y + 10000 * Math.sin(Math.toRadians(angle));
+
+			Laser l = new Laser(x,y,endx, endy, 20, this.color);
+			laser.add(l);
 		}
 		//cone attack
 	}
 	public void atk3(double tx, double ty) {
+		laserAtk = true;
 		//line laser
-		xdist = tx-x;
-		ydist = ty-y;
+		double xdist = tx-x;
+		double ydist = ty-y;
 		double m = ydist/xdist;
-		angle = Math.toDegrees(Math.atan(m));
+		double angle = Math.toDegrees(Math.atan(m));
 		double endx = 0;
 		double endy = 0;
 		if (angle < 0) {
@@ -237,7 +239,7 @@ public class Boss extends MovingObject {
 		}
 		endx = x + 10000 * Math.cos(Math.toRadians(angle));
 		endy = y + 10000 * Math.sin(Math.toRadians(angle));
-		
+
 		Laser l = new Laser(x,y,endx, endy, 20, this.color);
 		laser.add(l);
 
