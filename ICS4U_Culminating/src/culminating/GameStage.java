@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class GameStage extends Stage {
 
+    Timer _timer;
 
     /**
      * Buffer for double buffering.
@@ -43,6 +44,9 @@ public class GameStage extends Stage {
     Barrier barrier = new Barrier();
     boolean finished = false;
 
+    boolean isBarrierCreated = false, isBarrierBeingCreated = false;
+
+    Timer t = new Timer();
 
     GameStage() {
 
@@ -133,46 +137,46 @@ public class GameStage extends Stage {
         });
 
 
-        canvas.setOnMouseDragExited(event -> {
-
-//            long time = System.currentTimeMillis();
-//            if (currentTime - time > 5000) {
-//                barrier.c.clear();
-//                barrier.draw(gc);
-//            }
-            //Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
-            //timer++;
-
-            //barrier.c.add(c);
-//			
-            //if (timer == 5) {
-            //timer = 0;
-            //}
-            //Barrier barrier = new Barrier(x,y);
-            //draw(gc);
-        });
-
         canvas.setOnMouseDragged(event -> {
+
+            if (isBarrierCreated) {
+                return;
+            }
+
+            System.out.println(isBarrierBeingCreated);
 
             Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
 
-            double time = System.currentTimeMillis();
-            System.out.println(time);
             barrier.c.add(c);
+            isBarrierBeingCreated = true;
 
         });
 
 
+        canvas.setOnMouseReleased(event -> {
+            if (!isBarrierCreated && isBarrierBeingCreated) {
+                t.startTimer();
+                isBarrierCreated = true;
+                System.out.println("start timer");
+                isBarrierBeingCreated = false;
+            }
 
-        System.out.println("Running!");
+        });
+
+
         new Thread(new Runnable() {
             /**
              * Repaints the canvas periodically.
              */
             @Override
             public void run() {
-                System.out.println("called");
                 while (!finished) {
+                    if (isBarrierCreated) {
+                        if (t.hasBeenSeconds(3)) {
+                            isBarrierCreated = false;
+                            isBarrierBeingCreated = false;
+                        }
+                    }
                     if (p.dead) {
                         finished = true;
                     }
@@ -312,7 +316,7 @@ public class GameStage extends Stage {
             //gc.fillText("Use 'W,A,S,D' and the mouse to move the triangle", 10, 30);
             //gc.fillText("You die if a bullet hits you in any place other than the tip", 10, 50);
 
-            for (int i=0;i<b.laser.size(); i++) {
+            for (int i = 0; i < b.laser.size(); i++) {
                 b.laser.get(i).draw(gc);
             }
             for (int i = 0; i < numBalls; i++) {

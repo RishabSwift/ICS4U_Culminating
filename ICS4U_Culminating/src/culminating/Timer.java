@@ -6,7 +6,7 @@ public class Timer {
     private long oldTime;
 
     public Timer() {
-        oldTime = System.currentTimeMillis();
+//        oldTime = System.currentTimeMillis();
     }
 
     public long getOldTime() {
@@ -15,6 +15,10 @@ public class Timer {
 
     public long getCurrentTime() {
         return currentTime = System.currentTimeMillis();
+    }
+
+    public void startTimer() {
+        oldTime = System.currentTimeMillis();
     }
 
     public boolean hasBeenSeconds(int seconds) {
