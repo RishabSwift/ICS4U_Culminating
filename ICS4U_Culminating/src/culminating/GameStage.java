@@ -252,6 +252,35 @@ public class GameStage extends Stage {
 				b.health.decrease(10);
 			}
 		}
+		// boss bullet hits barrier
+				for (int i = 0; i < b.bullet.size(); i++) {
+					for(int j = 0; j < barrier.c.size(); j++) {
+						double xdif = b.bullet.get(i).x - barrier.c.get(j).getX();// p.xPoints[0];
+						double ydif = b.bullet.get(i).y - barrier.c.get(j).getY();//p.yPoints[0];
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							return;
+							//barrier.clear();
+							//p.setColor(Color.WHITE);
+							//p.moving = false;
+							//p.dead = true;
+						}
+					}
+					/*if(isBarrierCreated == true) {
+						double xdif = b.bullet.get(i).x - barrier.c.get(i).getX();// p.xPoints[0];
+						double ydif = b.bullet.get(i).y - barrier.c.get(i).getY();//p.yPoints[0];
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							barrier.clear();
+							//p.setColor(Color.WHITE);
+							//p.moving = false;
+							//p.dead = true;
+						}
+					}*/
+					
+				}
 		// boss bullet hits player
 		for (int i = 0; i < b.bullet.size(); i++) {
 			double xdif = b.bullet.get(i).x - p.xPoints[0];
@@ -263,6 +292,7 @@ public class GameStage extends Stage {
 				p.dead = true;
 			}
 		}
+		
 		for (int i = 0; i < b.bullet.size(); i++) {
 			double xdif = b.bullet.get(i).x - p.xPoints[1];
 			double ydif = b.bullet.get(i).y - p.yPoints[1];
