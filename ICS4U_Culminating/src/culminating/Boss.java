@@ -81,12 +81,12 @@ public class Boss extends MovingObject {
 	public void movtBehavior(double playerX, double playerY) {
 		switch 	(stgNum) {
 		case 1:
-			//move1();
+			move1();
 			//standard move and attack
 			return;
 		case 2:
 			//bouncer
-			//move1();
+			move1();
 			return;
 		case 3:
 			//sniper
@@ -104,25 +104,33 @@ public class Boss extends MovingObject {
 	public void atkBehavior(double playerX, double playerY) {
 		switch 	(stgNum) {
 		case 1:
+			atk1(45, false);
 			//atk3(playerX, playerY);
-			atk2(2, playerX, playerY, 20, 10, false);
+			//atk2(2, playerX, playerY, 20, 10, false);
 			//standard attack
 			return;
 		case 2:
-			//bounce balls
 			atk1(45, true);
 			return;
 		case 3:
-			//destroy wall attack
+			atk1(45, true);
+			atk2(1, playerX, playerY, 5, 20, false);
 			return;
 		case 4:
-			//charger
-
+			atk1(45, true);
+			atk2(1, playerX, playerY, 5, 20, false);
+			atk3(playerX, playerY);
 			return;
 		case 5:
-			//area of effect
+			atk1(45, true);
+			atk2(2, playerX, playerY, 5, 20, false);
+			atk3(playerX, playerY);
 			return;
 		case 6:
+			atk1(45, true);
+			atk2(1, playerX, playerY, 5, 20, true);
+			atk2(2, playerX, playerY, 5, 20, false);
+			atk3(playerX, playerY);
 			return;
 		}
 	}
@@ -191,10 +199,23 @@ public class Boss extends MovingObject {
 			Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
 			double xdist = tx-x;
 			double ydist = ty-y;
-			double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
-			int cycleNum = (int) dist/10;
-			bu.setXSpeed(xdist/cycleNum);
-			bu.setYSpeed(ydist/cycleNum);
+			double m = ydist/xdist;
+			double angle = Math.toDegrees(Math.atan(m));
+			double endx = 0;
+			double endy = 0;
+			if (angle < 0) {
+				angle += 360;
+			}
+			if (xdist < 0) {
+				angle += 180;
+			}
+			angle += (Math.random()*anglewidth) - anglewidth/2;
+
+			double xcycle = 10 * Math.cos(Math.toRadians(angle));
+			double ycycle = 10 * Math.sin(Math.toRadians(angle));
+
+			bu.setXSpeed(xcycle);
+			bu.setYSpeed(ycycle);
 			bu.color = color;
 			bullet.add(bu);
 		}
