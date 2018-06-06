@@ -86,7 +86,7 @@ public class Boss extends MovingObject {
 			return;
 		case 2:
 			//bouncer
-			move1();
+			//move1();
 			return;
 		case 3:
 			//sniper
