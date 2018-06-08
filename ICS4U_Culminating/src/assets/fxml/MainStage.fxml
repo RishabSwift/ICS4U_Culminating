@@ -17,7 +17,7 @@
             <graphic>
                 <ImageView fitHeight="52.0" fitWidth="257.0">
                     <image>
-                        <Image url="@../images/button_NewGame.png" />
+                        <Image url="@../images/buttons/button_NewGame.png" />
                     </image>
                 </ImageView>
             </graphic>
@@ -27,7 +27,7 @@
             <graphic>
                 <ImageView fitHeight="52.0" fitWidth="257.0">
                     <image>
-                        <Image url="@../images/button_LoadGame.png" />
+                        <Image url="@../images/buttons/button_LoadGame.png" />
                     </image>
                 </ImageView>
             </graphic>
@@ -37,7 +37,7 @@
             <graphic>
                 <ImageView fitHeight="52.0" fitWidth="257.0">
                     <image>
-                        <Image url="@../images/button_ExitGame.png" />
+                        <Image url="@../images/buttons/button_ExitGame.png" />
                     </image>
                 </ImageView>
             </graphic>

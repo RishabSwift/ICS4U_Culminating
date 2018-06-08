@@ -12,8 +12,8 @@ public class Coordinates {
         this.setY(y);
         //this.setTimer(timer);
 			/*if (timer < 5) {
-				xCoordinates.add(x);
-				yCoordinates.add(y);
+				xCoordinates.add(playerLocationX);
+				yCoordinates.add(playerLocationY);
 			}
 			else {
 				Barrier barrier = new Barrier (xCoordinates, yCoordinates);

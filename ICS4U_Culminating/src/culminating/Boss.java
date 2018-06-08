@@ -51,8 +51,8 @@ public class Boss extends MovingObject {
 
 	@Override
 	public void draw(GraphicsContext gc) {
-		cx = x - radius;
-		cy = y - radius;
+		cx = playerLocationX - radius;
+		cy = playerLocationY - radius;
 		int drawX = (int) cx;
 		int drawY = (int) cy;
 		gc.setFill(color);
@@ -75,6 +75,7 @@ public class Boss extends MovingObject {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
 		movtBehavior(playerX, playerY);
+
 	}
 
 	public void movtBehavior(double playerX, double playerY) {
@@ -235,8 +236,8 @@ public class Boss extends MovingObject {
 			if (projectileType == 1) {
 				coneCount--;
 				Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-				double xdist = tx-x;
-				double ydist = ty-y;
+				double xdist = tx-playerLocationX;
+				double ydist = ty-playerLocationY;
 				double m = ydist/xdist;
 				double angle = Math.toDegrees(Math.atan(m));
 				double endx = 0;
@@ -259,8 +260,8 @@ public class Boss extends MovingObject {
 			}
 			else {
 				coneCount--;
-				double xdist = tx-x;
-				double ydist = ty-y;
+				double xdist = tx-playerLocationX;
+				double ydist = ty-playerLocationY;
 				double m = ydist/xdist;
 				double angle = Math.toDegrees(Math.atan(m));
 				double endx = 0;
@@ -273,10 +274,10 @@ public class Boss extends MovingObject {
 				}
 				angle += (Math.random()*anglewidth) - anglewidth/2;
 
-				endx = x + 10000 * Math.cos(Math.toRadians(angle));
-				endy = y + 10000 * Math.sin(Math.toRadians(angle));
+				endx = playerLocationX + 10000 * Math.cos(Math.toRadians(angle));
+				endy = playerLocationY + 10000 * Math.sin(Math.toRadians(angle));
 
-				Laser l = new Laser(x,y,endx, endy, 20, this.color);
+				Laser l = new Laser(playerLocationX,playerLocationY,endx, endy, 20, this.color);
 				laser.add(l);
 			}
 			//cone attack
@@ -288,8 +289,8 @@ public class Boss extends MovingObject {
 	public void atk3(double tx, double ty) {
 		laserAtk = true;
 		//line laser
-		double xdist = tx-x;
-		double ydist = ty-y;
+		double xdist = tx- playerLocationX;
+		double ydist = ty- playerLocationY;
 		double m = ydist/xdist;
 		double angle = Math.toDegrees(Math.atan(m));
 		double endx = 0;
@@ -300,10 +301,10 @@ public class Boss extends MovingObject {
 		if (xdist < 0) {
 			angle += 180;
 		}
-		endx = x + 10000 * Math.cos(Math.toRadians(angle));
-		endy = y + 10000 * Math.sin(Math.toRadians(angle));
+		endx = playerLocationX + 10000 * Math.cos(Math.toRadians(angle));
+		endy = playerLocationY + 10000 * Math.sin(Math.toRadians(angle));
 
-		Laser l = new Laser(x,y,endx, endy, 20, this.color);
+		Laser l = new Laser(playerLocationX,playerLocationY,endx, endy, 20, this.color);
 		laser.add(l);
 
 	}
