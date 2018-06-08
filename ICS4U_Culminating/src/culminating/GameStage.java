@@ -181,7 +181,7 @@ public class GameStage extends Stage {
                             finished = true;
                         } else {
                             resetStg();
-                            pauseDuration = 40;
+                            pauseDuration = 8;
                         }
                     }
                     if (b.stgNum == 4) {

@@ -35,7 +35,7 @@ public class Laser {
 	}
 
 	public void animateOneStep() {
-		width -= 1;
+		width -= 0.5;
 	}
 
 }
