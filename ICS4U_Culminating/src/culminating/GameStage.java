@@ -14,165 +14,168 @@ import java.util.ArrayList;
 
 public class GameStage extends Stage {
 
+    Timer _timer;
 
-    /**
-     * Buffer for double buffering.
-     */
-    Image buffer;
-    /**
-     * The number of balls on the screen.
-     */
-    final int numBalls = 0;
-    /**
-     * The pause between repainting (should be set for about 30 frames per
-     * second).
-     */
-    int pauseDuration = 8;
-    /**
-     * An array of balls.
-     */
-    //Canvas canvas;
-    //GraphicsContext gc;
-    int timer = 0;
-    long currentTime = 0;
-    boolean win = false;
-    Bullet[] bullet = new Bullet[numBalls];
-    ArrayList<PBullet> pbullet = new ArrayList<PBullet>();
-    Player p;
-    Boss b;
-    Barrier barrier = new Barrier();
-    boolean finished = false;
+	/**
+	 * Buffer for double buffering.
+	 */
+	Image buffer;
+	/**
+	 * The number of balls on the screen.
+	 */
+	final int numBalls = 0;
+	/**
+	 * The pause between repainting (should be set for about 30 frames per
+	 * second).
+	 */
+	int pauseDuration = 8;
+	/**
+	 * An array of balls.
+	 */
+	//Canvas canvas;
+	//GraphicsContext gc;
+	int timer = 0;
+	long currentTime = 0;
+	boolean win = false;
+	Bullet[] bullet = new Bullet[numBalls];
+	ArrayList<PBullet> pbullet = new ArrayList<PBullet>();
+	Player p;
+	Boss b;
+	Barrier barrier = new Barrier();
+	boolean finished = false;
+	boolean isBarrierCreated = false, isBarrierBeingCreated = false;
+
+    Timer t = new Timer();
+
+	GameStage() {
+
+		this.setTitle(MainApp.GAME_NAME);
+		this.setResizable(false);
+
+		Group group = new Group();
+		Canvas canvas = new Canvas(MainApp.GAME_WIDTH, MainApp.GAME_HEIGHT);
+
+		final GraphicsContext gc = canvas.getGraphicsContext2D();
+		canvas.setFocusTraversable(true);
+
+		startGame(canvas, gc);
+
+		group.getChildren().addAll(canvas);
+
+		this.setScene(new Scene(group));
+		this.show();
+
+	}
+
+	public void startGame(Canvas canvas, GraphicsContext gc) {
+
+		//create the balls for the game
+		for (int i = 0; i < numBalls; i++) {
+			bullet[i] = new Bullet(50, 50, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
+			bullet[i].setXSpeed(Math.random() * 16 - 8);
+			bullet[i].setYSpeed(Math.random() * 16 - 8);
+			bullet[i].setColor(new Color(Math.random(), Math.random(), Math.random(), 1.0));
+		}
+
+		//create the boss
+		b = new Boss(900, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
+
+		//Create the Player
+		p = new Player(500, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
+
+		//moves the player based on the key pressed
+		canvas.setOnKeyPressed(event -> {
+			if (event.getCode() == KeyCode.W) {
+				p.setYSpeed(-10);
+			}
+			if (event.getCode() == KeyCode.A) {
+				p.setXSpeed(-10);
+			}
+			if (event.getCode() == KeyCode.S) {
+				p.setYSpeed(10);
+			}
+			if (event.getCode() == KeyCode.D) {
+				p.setXSpeed(10);
+			}
+		});
+
+		//stops the player's movemen when the corresponding key is released
+		canvas.setOnKeyReleased(event -> {
+			if (event.getCode() == KeyCode.W) {
+				p.setYSpeed(0);
+			}
+			if (event.getCode() == KeyCode.A) {
+				p.setXSpeed(0);
+			}
+			if (event.getCode() == KeyCode.S) {
+				p.setYSpeed(0);
+			}
+			if (event.getCode() == KeyCode.D) {
+				p.setXSpeed(0);
+			}
+		});
+
+		//changes the coordinants of the mouse in the canvas when it is moved.
+		canvas.setOnMouseMoved(event -> {
+			p.mx = event.getX();
+			p.my = event.getY();
+		});
+
+		canvas.setOnMouseClicked(event -> {
+			if (pbullet.size() < 5) {
+				PBullet bl = new PBullet(p.x, p.y, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
+				double xdist = event.getX() - p.x;
+				double ydist = event.getY() - p.y;
+				double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
+				int cycleNum = (int) dist / 10;
+				bl.setXSpeed(xdist / cycleNum);
+				bl.setYSpeed(ydist / cycleNum);
+				bl.color = Color.BLACK;
+				pbullet.add(bl);
+			}
+		});
 
 
-    GameStage() {
-
-        this.setTitle(MainApp.GAME_NAME);
-        this.setResizable(false);
-
-        Group group = new Group();
-        Canvas canvas = new Canvas(MainApp.GAME_WIDTH, MainApp.GAME_HEIGHT);
-
-        final GraphicsContext gc = canvas.getGraphicsContext2D();
-        canvas.setFocusTraversable(true);
-
-        startGame(canvas, gc);
-
-        group.getChildren().addAll(canvas);
-
-        this.setScene(new Scene(group));
-        this.show();
-
-    }
-
-    public void startGame(Canvas canvas, GraphicsContext gc) {
-
-        //create the balls for the game
-        for (int i = 0; i < numBalls; i++) {
-            bullet[i] = new Bullet(50, 50, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
-            bullet[i].setXSpeed(Math.random() * 16 - 8);
-            bullet[i].setYSpeed(Math.random() * 16 - 8);
-            bullet[i].setColor(new Color(Math.random(), Math.random(), Math.random(), 1.0));
-        }
-
-        //create the boss
-        b = new Boss(900, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
-
-        //Create the Player
-        p = new Player(500, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
-
-        //moves the player based on the key pressed
-        canvas.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.W) {
-                p.setYSpeed(-10);
-            }
-            if (event.getCode() == KeyCode.A) {
-                p.setXSpeed(-10);
-            }
-            if (event.getCode() == KeyCode.S) {
-                p.setYSpeed(10);
-            }
-            if (event.getCode() == KeyCode.D) {
-                p.setXSpeed(10);
-            }
-        });
-
-        //stops the player's movemen when the corresponding key is released
-        canvas.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.W) {
-                p.setYSpeed(0);
-            }
-            if (event.getCode() == KeyCode.A) {
-                p.setXSpeed(0);
-            }
-            if (event.getCode() == KeyCode.S) {
-                p.setYSpeed(0);
-            }
-            if (event.getCode() == KeyCode.D) {
-                p.setXSpeed(0);
-            }
-        });
-
-        //changes the coordinants of the mouse in the canvas when it is moved.
-        canvas.setOnMouseMoved(event -> {
-            p.mx = event.getX();
-            p.my = event.getY();
-        });
-
-        canvas.setOnMouseClicked(event -> {
-            if (pbullet.size() < 5) {
-                PBullet bl = new PBullet(p.x, p.y, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
-                double xdist = event.getX() - p.x;
-                double ydist = event.getY() - p.y;
-                double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
-                int cycleNum = (int) dist / 10;
-                bl.setXSpeed(xdist / cycleNum);
-                bl.setYSpeed(ydist / cycleNum);
-                bl.color = Color.BLACK;
-                pbullet.add(bl);
-            }
-        });
-
-
-        canvas.setOnMouseDragExited(event -> {
-
-//            long time = System.currentTimeMillis();
-//            if (currentTime - time > 5000) {
-//                barrier.c.clear();
-//                barrier.draw(gc);
-//            }
-            //Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
-            //timer++;
-
-            //barrier.c.add(c);
-//			
-            //if (timer == 5) {
-            //timer = 0;
-            //}
-            //Barrier barrier = new Barrier(x,y);
-            //draw(gc);
-        });
 
         canvas.setOnMouseDragged(event -> {
 
+            if (isBarrierCreated) {
+                return;
+            }
+
+            System.out.println(isBarrierBeingCreated);
+
             Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
 
-            double time = System.currentTimeMillis();
-            System.out.println(time);
             barrier.c.add(c);
+            isBarrierBeingCreated = true;
+
+        });
+        canvas.setOnMouseReleased(event -> {
+            if (!isBarrierCreated && isBarrierBeingCreated) {
+                t.startTimer();
+                isBarrierCreated = true;
+                isBarrierBeingCreated = false;
+            }
 
         });
 
 
-
-        System.out.println("Running!");
         new Thread(new Runnable() {
             /**
              * Repaints the canvas periodically.
              */
             @Override
             public void run() {
-                System.out.println("called");
                 while (!finished) {
+
+                    if (isBarrierCreated) {
+                        if (t.hasBeenSeconds(3)) {
+                            isBarrierCreated = false;
+                            isBarrierBeingCreated = false;
+                            barrier.clear();
+                        }
+                    }
                     if (p.dead) {
                         finished = true;
                     }
@@ -216,25 +219,27 @@ public class GameStage extends Stage {
                     }
                 }
 
-            }
-        }).start();
+
+			}
+		}).start();
 
 
-    }
+	}
 
-    public void resetStg() {
-        for (int i = 0; i < pbullet.size(); i++) {
-            pbullet.remove(i);
-        }
+	public void resetStg() {
+		for (int i = 0; i < pbullet.size(); i++) {
+			pbullet.remove(i);
+		}
 
-        b.nextLv();
-        b.health.setHealth(10);
-        b.setX(100);
-        b.setY(100);
-        p.setX(500);
-        p.setX(500);
+		b.nextLv();
+		b.health.setHealth(10);
+		b.setX(100);
+		b.setY(100);
+		p.setX(500);
+		p.setX(500);
 
-    }
+	}
+
 
     public void hitDetection() {
         //TODO Rishab change the hit detection to fit graphics
@@ -288,37 +293,38 @@ public class GameStage extends Stage {
         //player hits boss
     }
 
-    /**
-     * Clears the screen and paints the balls.
-     */
-    public void draw(GraphicsContext gc) {
-        if (p.dead) {
-            gc.setFill(Color.BLACK);
-            gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-            gc.setFill(Color.WHITE);
-            Font big = new Font(80);
-            gc.setFont(big);
-            gc.fillText("You Died", 800, 500);
-        } else if (b.health.isDead()) {
-            gc.setFill(Color.BLACK);
-            gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-            gc.setFill(Color.WHITE);
-            Font big = new Font(80);
-            gc.setFont(big);
-            gc.fillText("Stage Won", 800, 500);
-        } else {
-            if (b.stgNum == 4) {
-                gc.setFill(Color.BLACK);
-            } else {
-                gc.setFill(Color.WHITE);
-            }
-            gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-            gc.setFill(Color.BLACK);
-            gc.fillText("" + finished, 10, 10);
-            //gc.fillText("Use 'W,A,S,D' and the mouse to move the triangle", 10, 30);
-            //gc.fillText("You die if a bullet hits you in any place other than the tip", 10, 50);
+	/**
+	 * Clears the screen and paints the balls.
+	 */
+	public void draw(GraphicsContext gc) {
+		if (p.dead) {
+			gc.setFill(Color.BLACK);
+			gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+			gc.setFill(Color.WHITE);
+			Font big = new Font(80);
+			gc.setFont(big);
+			gc.fillText("You Died", 800, 500);
+		} else if (b.health.isDead()) {
+			gc.setFill(Color.BLACK);
+			gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+			gc.setFill(Color.WHITE);
+			Font big = new Font(80);
+			gc.setFont(big);
+			gc.fillText("Stage Won", 800, 500);
+		} else {
+			if (b.stgNum == 4) {
+				gc.setFill(Color.BLACK);
+			} else {
+				gc.setFill(Color.WHITE);
+			}
+			gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+			gc.setFill(Color.BLACK);
+			gc.fillText("" + finished, 10, 10);
+			//gc.fillText("Use 'W,A,S,D' and the mouse to move the triangle", 10, 30);
+			//gc.fillText("You die if a bullet hits you in any place other than the tip", 10, 50);
 
-            for (int i=0;i<b.laser.size(); i++) {
+
+            for (int i = 0; i < b.laser.size(); i++) {
                 b.laser.get(i).draw(gc);
             }
             for (int i = 0; i < numBalls; i++) {
@@ -336,5 +342,4 @@ public class GameStage extends Stage {
             gc.drawImage(buffer, 0, 0); // double buffering
         }
     }
-
 }
