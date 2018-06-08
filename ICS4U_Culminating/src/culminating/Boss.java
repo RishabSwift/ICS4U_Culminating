@@ -57,6 +57,8 @@ public class Boss extends MovingObject {
 		int drawY = (int) cy;
 		gc.setFill(color);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
+		gc.fillText("" + coneCount, 10, 30);
+		gc.fillText("" + coneAtk, 10, 50);
 
 		//		gc.setStroke(color.BLACK);
 		//		gc.setLineWidth(5);
@@ -72,7 +74,7 @@ public class Boss extends MovingObject {
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
-		//movtBehavior(playerX, playerY);
+		movtBehavior(playerX, playerY);
 	}
 
 	public void movtBehavior(double playerX, double playerY) {
@@ -82,23 +84,33 @@ public class Boss extends MovingObject {
 		}
 		switch 	(stgNum) {
 		case 1:
-			move1();
-			//standard move and attack
+			if (timeCount%100 == 0) {
+				move1();
+			}
 			return;
 		case 2:
-			//bouncer
-			//move1();
-			return;
+			if (timeCount%100 == 0) {
+				move1();
+			}			return;
 		case 3:
 			//sniper
-			return;
+			if (timeCount%100 == 0) {
+				move1();
+			}			return;
 		case 4:
 			//charger
-			return;
+			if (timeCount%100 == 0) {
+				move1();
+			}			return;
 		case 5:
 			//slow mover
-			return;
-		case 6: color = Color.RED;
+			if (timeCount%100 == 0) {
+				move1();
+			}			return;
+		case 6: 
+			if (timeCount%100 == 0) {
+				move1();
+			}
 		}
 	}
 
@@ -114,19 +126,19 @@ public class Boss extends MovingObject {
 			return;
 		case 2:
 			if (timeCount%100 == 0) {
-			//	atk1(45, true);
+				atk1(45, true);
 			}
 			return;
 		case 3:
 			if (timeCount%100 == 0) {
-			//	atk1(45, true);
-				if (timeCount%3 == 0 && !coneAtk) {
-					atk2(2, playerX, playerY, 20, 10, false);	
+				atk1(45, true);
+				if (timeCount%6 == 0 && !coneAtk) {
+					atk2(1, playerX, playerY, 20, 10, false);	
 				}
 
 			}
 			if (timeCount%15 == 0 && coneAtk) {
-				atk2(2, playerX, playerY, 20, 10, false);
+				atk2(1, playerX, playerY, 20, 10, false);
 			}
 			return;
 		case 4:
@@ -219,7 +231,7 @@ public class Boss extends MovingObject {
 			coneCount = shots;
 			coneAtk = true;
 		}
-		if (coneCount > 0) {
+		else if (coneCount > 0) {
 			if (projectileType == 1) {
 				coneCount--;
 				Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
