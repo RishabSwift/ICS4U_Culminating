@@ -22,15 +22,15 @@ public class MainStageController {
      */
     public void initialize() {
 
-        Image imageNewGame = new Image(getClass().getResourceAsStream("/assets/images/button_NewGame.png"));
-        Image imageNewGameHover = new Image(getClass().getResourceAsStream("/assets/images/button_NewGameHover.png"));
-        Image imageNewGameClicked = new Image(getClass().getResourceAsStream("/assets/images/button_NewGameClicked.png"));
-        Image imageLoadGame = new Image(getClass().getResourceAsStream("/assets/images/button_LoadGame.png"));
-        Image imageLoadGameHover = new Image(getClass().getResourceAsStream("/assets/images/button_LoadGameHover.png"));
-        Image imageLoadGameClicked = new Image(getClass().getResourceAsStream("/assets/images/button_LoadGameClicked.png"));
-        Image imageExitGame = new Image(getClass().getResourceAsStream("/assets/images/button_ExitGame.png"));
-        Image imageExitGameHover = new Image(getClass().getResourceAsStream("/assets/images/button_ExitGameHover.png"));
-        Image imageExitGameClicked = new Image(getClass().getResourceAsStream("/assets/images/button_ExitGameClicked.png"));
+        Image imageNewGame = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_NewGame.png"));
+        Image imageNewGameHover = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_NewGameHover.png"));
+        Image imageNewGameClicked = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_NewGameClicked.png"));
+        Image imageLoadGame = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_LoadGame.png"));
+        Image imageLoadGameHover = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_LoadGameHover.png"));
+        Image imageLoadGameClicked = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_LoadGameClicked.png"));
+        Image imageExitGame = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_ExitGame.png"));
+        Image imageExitGameHover = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_ExitGameHover.png"));
+        Image imageExitGameClicked = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_ExitGameClicked.png"));
 
         setButtonStyle(buttonNewGame, imageNewGame, imageNewGameHover, imageNewGameClicked);
         setButtonStyle(buttonLoadGame, imageLoadGame, imageLoadGameHover, imageLoadGameClicked);

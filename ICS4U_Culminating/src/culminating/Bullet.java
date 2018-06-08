@@ -33,9 +33,9 @@ public class Bullet extends MovingObject {
 	 * Calls the superclass constructor, plus sets radius, and flash parameters.
 	 * 
 	 * @param x
-	 *            The x location.
+	 *            The playerLocationX location.
 	 * @param y
-	 *            The y location.
+	 *            The playerLocationY location.
 	 * @param left
 	 *            The left edge.
 	 * @param right
@@ -66,8 +66,8 @@ public class Bullet extends MovingObject {
 	 *            The graphics context.
 	 */
 	public void draw(GraphicsContext gc) {
-		int drawX = (int) x - radius;
-		int drawY = (int) y - radius;
+		int drawX = (int) playerLocationX - radius;
+		int drawY = (int) playerLocationY - radius;
 		gc.setFill(color);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
 	}

@@ -17,7 +17,7 @@ public class Boss extends MovingObject {
 	ArrayList<Bullet> bullet = new  ArrayList<Bullet>();
 	ArrayList<Laser> laser = new  ArrayList<Laser>();
 	int timeCount = 0;
-	
+
 
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
@@ -49,8 +49,8 @@ public class Boss extends MovingObject {
 
 	@Override
 	public void draw(GraphicsContext gc) {
-		cx = x - radius;
-		cy = y - radius;
+		cx = playerLocationX - radius;
+		cy = playerLocationY - radius;
 		int drawX = (int) cx;
 		int drawY = (int) cy;
 		gc.setFill(color);
@@ -60,7 +60,7 @@ public class Boss extends MovingObject {
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		if (timeCount == 100) {
-			atkBehavior(playerX, playerY);		
+			atkBehavior(playerX, playerY);
 			timeCount = 0;
 			//movtBehavior(playerX, playerY);
 		}
@@ -170,37 +170,37 @@ public class Boss extends MovingObject {
 
 	public void atk2(int projectileType, double tx, double ty, boolean bounce) {
 		if (projectileType == 1) {
-			
+
 			Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-			double xdist = tx-x;
-			double ydist = ty-y;
+			double xdist = tx- playerLocationX;
+			double ydist = ty- playerLocationY;
 			double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
 			int cycleNum = (int) dist/10;
 			bu.setXSpeed(xdist/cycleNum);
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-			
+
 			bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-			xdist = tx-x + 20;
-			ydist = ty-y;
+			xdist = tx- playerLocationX + 20;
+			ydist = ty- playerLocationY;
 			dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
 			cycleNum = (int) dist/10;
 			bu.setXSpeed(xdist/cycleNum);
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-			
+
 			bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-			xdist = tx-x - 20;
-			ydist = ty-y;
+			xdist = tx- playerLocationX - 20;
+			ydist = ty- playerLocationY;
 			dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
 			cycleNum = (int) dist/10;
 			bu.setXSpeed(xdist/cycleNum);
 			bu.setYSpeed(ydist/cycleNum);
 			bu.color = color;
 			bullet.add(bu);
-			
+
 		}
 		else {
 
@@ -209,8 +209,8 @@ public class Boss extends MovingObject {
 	}
 	public void atk3(double tx, double ty) {
 		//line laser
-		double xdist = tx-x;
-		double ydist = ty-y;
+		double xdist = tx- playerLocationX;
+		double ydist = ty- playerLocationY;
 		double m = ydist/xdist;
 		double k = 0;
 		boolean edge = false;
@@ -222,10 +222,10 @@ public class Boss extends MovingObject {
 				k++;
 			}
 		}
-		
-		Laser l = new Laser(x,y,x + (xdist), y + + (ydist), 20, this.color);
+
+		Laser l = new Laser(playerLocationX, playerLocationY, playerLocationX + (xdist), playerLocationY + + (ydist), 20, this.color);
 		laser.add(l);
-		
+
 	}
 
 

@@ -117,15 +117,15 @@ public class GameStage extends Stage {
 
 		//changes the coordinants of the mouse in the canvas when it is moved.
 		canvas.setOnMouseMoved(event -> {
-			p.mx = event.getX();
-			p.my = event.getY();
+			p.mouseLocationX = event.getX();
+			p.mouseLocationY = event.getY();
 		});
 
 		canvas.setOnMouseClicked(event -> {
 			if (pbullet.size() < 5) {
-				PBullet bl = new PBullet(p.x, p.y, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
-				double xdist = event.getX() - p.x;
-				double ydist = event.getY() - p.y;
+				PBullet bl = new PBullet(p.playerLocationX, p.playerLocationY, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
+				double xdist = event.getX() - p.playerLocationX;
+				double ydist = event.getY() - p.playerLocationY;
 				double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
 				int cycleNum = (int) dist / 10;
 				bl.setXSpeed(xdist / cycleNum);
@@ -205,7 +205,7 @@ public class GameStage extends Stage {
                     }
                     draw(gc);
                     hitDetection();
-                    b.behavior(p.x, p.y);
+                    b.behavior(p.playerLocationX, p.playerLocationY);
                     if (p.dead || b.health.isDead()) {
                         draw(gc);
 //						if (b.health.isDead()) {
@@ -254,8 +254,8 @@ public class GameStage extends Stage {
 		}
 		// boss bullet hits player
 		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).x - p.xPoints[0];
-			double ydif = b.bullet.get(i).y - p.yPoints[0];
+			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[0];
+			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[0];
 			double rad = b.bullet.get(i).radius;
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
 				p.setColor(Color.WHITE);
@@ -264,8 +264,8 @@ public class GameStage extends Stage {
 			}
 		}
 		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).x - p.xPoints[1];
-			double ydif = b.bullet.get(i).y - p.yPoints[1];
+			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[1];
+			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[1];
 			double rad = b.bullet.get(i).radius;
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
 				p.setColor(Color.WHITE);
@@ -274,8 +274,8 @@ public class GameStage extends Stage {
 			}
 		}
 		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).x - p.xPoints[2];
-			double ydif = b.bullet.get(i).y - p.yPoints[2];
+			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[2];
+			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[2];
 			double rad = b.bullet.get(i).radius;
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
 				p.setColor(Color.WHITE);
