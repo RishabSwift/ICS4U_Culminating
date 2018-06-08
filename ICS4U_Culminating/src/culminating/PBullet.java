@@ -35,9 +35,9 @@ public class PBullet extends MovingObject {
 	 * Calls the superclass constructor, plus sets radius, and flash parameters.
 	 * 
 	 * @param x
-	 *            The x location.
+	 *            The playerLocationX location.
 	 * @param y
-	 *            The y location.
+	 *            The playerLocationY location.
 	 * @param left
 	 *            The left edge.
 	 * @param right
@@ -79,10 +79,10 @@ public class PBullet extends MovingObject {
 	 *            The graphics context.
 	 */
 	public void draw(GraphicsContext gc) {
-		int drawX = (int) x - radius;
-		int drawY = (int) y - radius;
-		this.cx = x- radius;
-		this.cy = y- radius;
+		int drawX = (int) playerLocationX - radius;
+		int drawY = (int) playerLocationY - radius;
+		this.cx = playerLocationX - radius;
+		this.cy = playerLocationY - radius;
 		gc.setFill(color.BLACK);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
 

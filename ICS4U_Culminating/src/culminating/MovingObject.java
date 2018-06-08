@@ -3,15 +3,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
- * Superclass for a generic moving object. This class takes care of the x and y
- * location (should be the centre of the object), the x and y speed, the color,
+ * Superclass for a generic moving object. This class takes care of the playerLocationX and playerLocationY
+ * location (should be the centre of the object), the playerLocationX and playerLocationY speed, the color,
  * and the top, bottom, left, and right edges of the screen. <br>
  * <br>
  * 
  * The class implements a thread that updates the objects' position every 10 ms
- * (by default). At each step, the x and y position are updated based on the x
- * and y speed. Then collisions with the edge of the screen are checked, and the
- * x and y speeds are reversed if necessary.<br>
+ * (by default). At each step, the playerLocationX and playerLocationY position are updated based on the playerLocationX
+ * and playerLocationY speed. Then collisions with the edge of the screen are checked, and the
+ * playerLocationX and playerLocationY speeds are reversed if necessary.<br>
  * <br>
  * 
  * The class also calls animateOneStep() for each update. If the object designer
@@ -31,19 +31,19 @@ import javafx.scene.paint.Color;
 public abstract class MovingObject implements Runnable {
 
 	/**
-	 * The x location of the object.
+	 * The playerLocationX location of the object.
 	 */
-	double x;
+	double playerLocationX;
 	/**
-	 * The y location of the object.
+	 * The playerLocationY location of the object.
 	 */
-	double y;
+	double playerLocationY;
 	/**
-	 * The x speed of the object.
+	 * The playerLocationX speed of the object.
 	 */
 	double xSpeed;
 	/**
-	 * The y speed of the object.
+	 * The playerLocationY speed of the object.
 	 */
 	double ySpeed;
 	/**
@@ -84,9 +84,9 @@ public abstract class MovingObject implements Runnable {
 	 * thread. Every subclass of MovingObject must use this constructor.
 	 * 
 	 * @param x
-	 *            Initial x position.
+	 *            Initial playerLocationX position.
 	 * @param y
-	 *            Initial y position.
+	 *            Initial playerLocationY position.
 	 * @param left
 	 *            Left edge for bouncing.
 	 * @param right
@@ -102,8 +102,8 @@ public abstract class MovingObject implements Runnable {
 		this.xSpeed = 0;
 		this.ySpeed = 0;
 		this.color = Color.BLACK;
-		this.x = x;
-		this.y = y;
+		this.playerLocationX = x;
+		this.playerLocationY = y;
 		this.left = left;
 		this.right = right;
 		this.top = top;
@@ -129,14 +129,14 @@ public abstract class MovingObject implements Runnable {
 	}
 
 	/**
-	 * Updates the x and y values in an infinite loop. If object hits an edge, x
-	 * or y speed is reversed as appropriate.
+	 * Updates the playerLocationX and playerLocationY values in an infinite loop. If object hits an edge, playerLocationX
+	 * or playerLocationY speed is reversed as appropriate.
 	 */
 	public void run() {
 		while (moving) {
-			x += xSpeed;
-			y += ySpeed;
-			if (x >= right | x <= left) {
+			playerLocationX += xSpeed;
+			playerLocationY += ySpeed;
+			if (playerLocationX >= right | playerLocationX <= left) {
 				if (bounce) {
 					xSpeed *= -1;
 				}
@@ -144,7 +144,7 @@ public abstract class MovingObject implements Runnable {
 					edge = true;
 				}
 			}
-			if (y >= bottom | y <= top) {
+			if (playerLocationY >= bottom | playerLocationY <= top) {
 				if (bounce) {
 					ySpeed *= -1;
 				}
@@ -173,43 +173,43 @@ public abstract class MovingObject implements Runnable {
 	abstract public void animateOneStep();
 
 	/**
-	 * Sets the x speed.
+	 * Sets the playerLocationX speed.
 	 * 
 	 * @param xSpeed
-	 *            New x speed.
+	 *            New playerLocationX speed.
 	 */
 	public void setXSpeed(double xSpeed) {
 		this.xSpeed = xSpeed;
 	}
 
 	/**
-	 * Sets the y speed.
+	 * Sets the playerLocationY speed.
 	 * 
 	 * @param ySpeed
-	 *            New y speed.
+	 *            New playerLocationY speed.
 	 */
 	public void setYSpeed(double ySpeed) {
 		this.ySpeed = ySpeed;
 	}
 
 	/**
-	 * Sets the x location.
+	 * Sets the playerLocationX location.
 	 * 
 	 * @param x
-	 *            New x location.
+	 *            New playerLocationX location.
 	 */
 	public void setX(int x) {
-		this.x = x;
+		this.playerLocationX = x;
 	}
 
 	/**
-	 * Sets the y location.
+	 * Sets the playerLocationY location.
 	 * 
 	 * @param y
-	 *            New y location.
+	 *            New playerLocationY location.
 	 */
 	public void setY(int y) {
-		this.y = y;
+		this.playerLocationY = y;
 	}
 
 	/**
