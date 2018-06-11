@@ -1,9 +1,12 @@
 package culminating;
 
+import com.sun.javaws.progress.Progress;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -45,6 +48,9 @@ public class GameStage extends Stage {
 	boolean finished = false;
 	boolean isBarrierCreated = false, isBarrierBeingCreated = false;
 
+    ProgressBar bossHealthProgress;
+    ProgressBar playerHealthProgress;
+
     Timer t = new Timer();
 
 	GameStage() {
@@ -58,9 +64,12 @@ public class GameStage extends Stage {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
 		canvas.setFocusTraversable(true);
 
+
 		startGame(canvas, gc);
 
-		group.getChildren().addAll(canvas);
+        bossHealthProgress = new ProgressBar(100);
+        playerHealthProgress = new ProgressBar(100);
+		group.getChildren().addAll(canvas, bossHealthProgress);
 
 		this.setScene(new Scene(group));
 		this.show();
@@ -217,6 +226,10 @@ public class GameStage extends Stage {
                         Thread.sleep(pauseDuration);
                     } catch (InterruptedException e) {
                     }
+
+
+                    bossHealthProgress.setProgress(b.health.getHealth());
+
                 }
 
 
@@ -232,7 +245,8 @@ public class GameStage extends Stage {
 		}
 
 		b.nextLv();
-		b.health.setHealth(10);
+		b.health.setHealth(100);
+		bossHealthProgress.setProgress(b.health.getHealth());
 		b.setX(100);
 		b.setY(100);
 		p.setX(500);
