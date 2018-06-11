@@ -1,5 +1,6 @@
 package culminating;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class GameStage extends Stage {
 
-    Timer _timer;
+	Timer _timer;
 
 	/**
 	 * Buffer for double buffering.
@@ -32,8 +33,6 @@ public class GameStage extends Stage {
 	/**
 	 * An array of balls.
 	 */
-	//Canvas canvas;
-	//GraphicsContext gc;
 	int timer = 0;
 	long currentTime = 0;
 	boolean win = false;
@@ -45,7 +44,7 @@ public class GameStage extends Stage {
 	boolean finished = false;
 	boolean isBarrierCreated = false, isBarrierBeingCreated = false;
 
-    Timer t = new Timer();
+	Timer t = new Timer();
 
 	GameStage() {
 
@@ -117,15 +116,15 @@ public class GameStage extends Stage {
 
 		//changes the coordinants of the mouse in the canvas when it is moved.
 		canvas.setOnMouseMoved(event -> {
-			p.mouseLocationX = event.getX();
-			p.mouseLocationY = event.getY();
+			p.mx = event.getX();
+			p.my = event.getY();
 		});
 
 		canvas.setOnMouseClicked(event -> {
 			if (pbullet.size() < 5) {
-				PBullet bl = new PBullet(p.playerLocationX, p.playerLocationY, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
-				double xdist = event.getX() - p.playerLocationX;
-				double ydist = event.getY() - p.playerLocationY;
+				PBullet bl = new PBullet(p.x, p.y, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
+				double xdist = event.getX() - p.x;
+				double ydist = event.getY() - p.y;
 				double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
 				int cycleNum = (int) dist / 10;
 				bl.setXSpeed(xdist / cycleNum);
@@ -137,87 +136,136 @@ public class GameStage extends Stage {
 
 
 
-        canvas.setOnMouseDragged(event -> {
+		
+		canvas.setOnMouseDragged(event -> {
 
-            if (isBarrierCreated) {
-                return;
-            }
+			if (isBarrierCreated) {
+				return;
+			}
 
-            System.out.println(isBarrierBeingCreated);
+			System.out.println(isBarrierBeingCreated);
+			
+			double _x = event.getX();
+			double _y = event.getY();
 
-            Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
+			double totalDistance = 0;
+			double hyp = Math.sqrt(Math.pow(_x, 2) + Math.pow(_y, 2));
+			
+			totalDistance += hyp;
+			System.out.println(t);
+			
+			
+			//Coordinates c = new Coordinates(event.getX(), event.getY());
+			
+			if (hyp < 600) {
+				Coordinates c = new Coordinates(event.getX(), event.getY());
+				barrier.c.add(c);
+				isBarrierBeingCreated = true;
+			}  else {
+				if (!isBarrierCreated && isBarrierBeingCreated) {
+					t.startTimer();
+					isBarrierCreated = true;
+					isBarrierBeingCreated = false;
+				}
+			}
+			
+			System.out.println(barrier.c.size());
+			
+	
+			//barrier.c.add(c);
+			//isBarrierBeingCreated = true;
+//			if (barrier.c.size() < 10) {
+//				if (hyp > 300) {
+//					Coordinates c = new Coordinates(event.getX(), event.getY());
+//					 barrier.c.add(c);
+//				}
+//				isBarrierBeingCreated = true;
+//			}
+//			else {
+//				if (!isBarrierCreated && isBarrierBeingCreated) {
+//					t.startTimer();
+//					isBarrierCreated = true;
+//					isBarrierBeingCreated = false;
+//				}
+//			}
 
-            barrier.c.add(c);
-            isBarrierBeingCreated = true;
-
-        });
-        canvas.setOnMouseReleased(event -> {
-            if (!isBarrierCreated && isBarrierBeingCreated) {
-                t.startTimer();
-                isBarrierCreated = true;
-                isBarrierBeingCreated = false;
-            }
-
-        });
 
 
-        new Thread(new Runnable() {
-            /**
-             * Repaints the canvas periodically.
-             */
-            @Override
-            public void run() {
-                while (!finished) {
 
-                    if (isBarrierCreated) {
-                        if (t.hasBeenSeconds(3)) {
-                            isBarrierCreated = false;
-                            isBarrierBeingCreated = false;
-                            barrier.clear();
-                        }
-                    }
-                    if (p.dead) {
-                        finished = true;
-                    }
-                    if (b.health.isDead()) {
-                        if (b.stgNum == 6) {
-                            finished = true;
-                        } else {
-                            resetStg();
-                            pauseDuration = 8;
-                        }
-                    }
-                    if (b.stgNum == 4) {
-                        p.color = Color.WHITE;
-                        for (int j = 0; j < pbullet.size(); j++) {
-                            pbullet.get(j).color = Color.WHITE;
-                        }
-                    }
-                    for (int i = 0; i < b.bullet.size(); i++) {
-                        if (b.bullet.get(i).edge) {
-                            b.bullet.remove(i);
-                        }
-                    }
-                    for (int i = 0; i < pbullet.size(); i++) {
-                        if (pbullet.get(i).edge) {
-                            pbullet.remove(i);
-                        }
-                    }
-                    draw(gc);
-                    hitDetection();
-                    b.behavior(p.playerLocationX, p.playerLocationY);
-                    if (p.dead || b.health.isDead()) {
-                        draw(gc);
-//						if (b.health.isDead()) {
-//							resetStg();
-//						}
-                        pauseDuration = 1000;
-                    }
-                    try {
-                        Thread.sleep(pauseDuration);
-                    } catch (InterruptedException e) {
-                    }
-                }
+
+		});
+		canvas.setOnMouseReleased(event -> {
+			if (!isBarrierCreated && isBarrierBeingCreated) {
+				t.startTimer();
+				isBarrierCreated = true;
+				isBarrierBeingCreated = false;
+			}
+
+		});
+
+
+		new Thread(new Runnable() {
+			/**
+			 * Repaints the canvas periodically.
+			 */
+			@Override
+			public void run() {
+				while (!finished) {
+
+					if (isBarrierCreated) {
+						if (t.hasBeenSeconds(3)) {
+							isBarrierCreated = false;
+							isBarrierBeingCreated = false;
+							barrier.clear();
+						}
+					}
+					if (p.dead) {
+						finished = true;
+					}
+					if(p.health.isDead()) {
+						p.dead = true;
+						p.moving = false;
+					}
+
+					if (b.health.isDead()) {
+						if (b.stgNum == 6) {
+							finished = true;
+						} else {
+							resetStg();
+							pauseDuration = 40;
+						}
+					}
+					if (b.stgNum == 4) {
+						p.color = Color.WHITE;
+						for (int j = 0; j < pbullet.size(); j++) {
+							pbullet.get(j).color = Color.WHITE;
+						}
+					}
+					for (int i = 0; i < b.bullet.size(); i++) {
+						if (b.bullet.get(i).edge) {
+							b.bullet.remove(i);
+						}
+					}
+					for (int i = 0; i < pbullet.size(); i++) {
+						if (pbullet.get(i).edge) {
+							pbullet.remove(i);
+						}
+					}
+					draw(gc);
+					hitDetection();
+					b.behavior(p.x, p.y);
+					if (p.dead || b.health.isDead()) {
+						draw(gc);
+						//						if (b.health.isDead()) {
+						//							resetStg();
+						//						}
+						pauseDuration = 1000;
+					}
+					try {
+						Thread.sleep(pauseDuration);
+					} catch (InterruptedException e) {
+					}
+				}
 
 
 			}
@@ -226,13 +274,14 @@ public class GameStage extends Stage {
 
 	}
 
+
 	public void resetStg() {
 		for (int i = 0; i < pbullet.size(); i++) {
 			pbullet.remove(i);
 		}
 
 		b.nextLv();
-		b.health.setHealth(10);
+		b.health.setHealth(100);
 		b.setX(100);
 		b.setY(100);
 		p.setX(500);
@@ -252,35 +301,170 @@ public class GameStage extends Stage {
 				b.health.decrease(10);
 			}
 		}
+		// boss bullet hits barrier
+		//double l = barrier.c.get(0).getX();
+		//if (barrier.c.size()>0) {
+		//double lastX = barrier.c.get(barrier.c.size()-1).getX();
+		//double orgX = barrier.c.get(0).getX();
+		//double orgY = barrier.c.get(0).getY();
+		//double lastY = barrier.c.get(barrier.c.size()-1).getY();
+		//}
+
+		for (int i = 0; i < b.bullet.size(); i++) {
+			/*
+			if (orgX < lastX && orgY < lastY) {
+				double xdif = b.bullet.get(i).x - orgX++;
+				double ydif = b.bullet.get(i).y - orgY++;
+				double rad = b.bullet.get(i).radius;
+				if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+					b.bullet.remove(i);
+					return;
+				}
+			}
+			if (orgX > lastX && orgY < lastY) {
+				double xdif = b.bullet.get(i).x - orgX--;
+				double ydif = b.bullet.get(i).y - orgY++;
+				double rad = b.bullet.get(i).radius;
+				if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+					b.bullet.remove(i);
+					return;
+				}
+			}
+			if (orgX < lastX && orgY > lastY) {
+				double xdif = b.bullet.get(i).x - orgX++;
+				double ydif = b.bullet.get(i).y - orgY--;
+				double rad = b.bullet.get(i).radius;
+				if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+					b.bullet.remove(i);
+					return;
+				}
+			}
+			if (orgX > lastX && orgY > lastY) {
+				double xdif = b.bullet.get(i).x - orgX--;
+				double ydif = b.bullet.get(i).y - orgY--;
+				double rad = b.bullet.get(i).radius;
+				if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+					b.bullet.remove(i);
+					return;
+				}
+			}*/
+			for(int j = 0; j < barrier.c.size(); j++) {
+			//if (barrier.c.size()>1) {
+				double xdif = b.bullet.get(i).x - barrier.c.get(j).getX();// p.xPoints[0];
+				double ydif = b.bullet.get(i).y - barrier.c.get(j).getY();//p.yPoints[0];
+				double rad = b.bullet.get(i).radius;
+				if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+					b.bullet.remove(i);
+					return;
+				}
+					//barrier.clear();
+					//p.setColor(Color.WHITE);
+					//p.moving = false;
+					//p.dead = true;
+				//}
+					/*double orgX = barrier.c.get(0).getX();
+					double orgY = barrier.c.get(0).getY();
+					double lastX = barrier.c.get(barrier.c.size()-1).getX();
+					double lastY = barrier.c.get(barrier.c.size()-1).getY();
+					while (orgX < lastX && orgY < lastY) {
+						
+						double xdif = b.bullet.get(i).x - orgX++;
+						double ydif = b.bullet.get(i).y - orgY++;
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							return;
+						}
+					}
+					while (orgX > lastX && orgY < lastY) {
+						double xdif = b.bullet.get(i).x - orgX--;
+						double ydif = b.bullet.get(i).y - orgY++;
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							return;
+						}
+					}
+					while (orgX < lastX && orgY > lastY) {
+						double xdif = b.bullet.get(i).x - orgX++;
+						double ydif = b.bullet.get(i).y - orgY--;
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							return;
+						}
+					}
+					while (orgX > lastX && orgY > lastY) {
+						double xdif = b.bullet.get(i).x - orgX--;
+						double ydif = b.bullet.get(i).y - orgY--;
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							return;
+						}
+*/
+					//double xdif = b.bullet.get(i).x - barrier.c.get(j).getX();// p.xPoints[0];
+					//double ydif = b.bullet.get(i).y - barrier.c.get(j).getY();//p.yPoints[0];
+					//double rad = b.bullet.get(i).radius;
+					//if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+						//b.bullet.remove(i);
+						//return;
+						//barrier.clear();
+						//p.setColor(Color.WHITE);
+						//p.moving = false;
+						//p.dead = true;
+					//}
+				//}
+			}
+			
+			//}
+			/*if(isBarrierCreated == true) {
+						double xdif = b.bullet.get(i).x - barrier.c.get(i).getX();// p.xPoints[0];
+						double ydif = b.bullet.get(i).y - barrier.c.get(i).getY();//p.yPoints[0];
+						double rad = b.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							b.bullet.remove(i);
+							barrier.clear();
+							//p.setColor(Color.WHITE);
+							//p.moving = false;
+							//p.dead = true;
+						}
+					}*/
+
+		}
 		// boss bullet hits player
 		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[0];
-			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[0];
+			double xdif = b.bullet.get(i).x - p.xPoints[0];
+			double ydif = b.bullet.get(i).y - p.yPoints[0];
 			double rad = b.bullet.get(i).radius;
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
-				p.setColor(Color.WHITE);
-				p.moving = false;
-				p.dead = true;
+				//p.setColor(Color.WHITE);
+				p.health.decrease(10);
+				//p.moving = false;
+				//p.dead = true;
+			}
+		}
+
+		for (int i = 0; i < b.bullet.size(); i++) {
+			double xdif = b.bullet.get(i).x - p.xPoints[1];
+			double ydif = b.bullet.get(i).y - p.yPoints[1];
+			double rad = b.bullet.get(i).radius;
+			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+				//p.setColor(Color.WHITE);
+				p.health.decrease(10);
+				//p.moving = false;
+				//p.dead = true;
 			}
 		}
 		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[1];
-			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[1];
+			double xdif = b.bullet.get(i).x - p.xPoints[2];
+			double ydif = b.bullet.get(i).y - p.yPoints[2];
 			double rad = b.bullet.get(i).radius;
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
-				p.setColor(Color.WHITE);
-				p.moving = false;
-				p.dead = true;
-			}
-		}
-		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[2];
-			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[2];
-			double rad = b.bullet.get(i).radius;
-			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
-				p.setColor(Color.WHITE);
-				p.moving = false;
-				p.dead = true;
+				//p.setColor(Color.WHITE);
+				p.health.decrease(10);
+				//p.moving = false;
+				//p.dead = true;
 			}
 		}
 		//player hits boss
@@ -317,22 +501,22 @@ public class GameStage extends Stage {
 			//gc.fillText("You die if a bullet hits you in any place other than the tip", 10, 50);
 
 
-            for (int i = 0; i < b.laser.size(); i++) {
-                b.laser.get(i).draw(gc);
-            }
-            for (int i = 0; i < numBalls; i++) {
-                bullet[i].draw(gc);
-            }
-            for (int i = 0; i < b.bullet.size(); i++) {
-                b.bullet.get(i).draw(gc);
-            }
-            for (int i = 0; i < pbullet.size(); i++) {
-                pbullet.get(i).draw(gc);
-            }
-            b.draw(gc);
-            p.draw(gc);
-            barrier.draw(gc);
-            gc.drawImage(buffer, 0, 0); // double buffering
-        }
-    }
+			for (int i = 0; i < b.laser.size(); i++) {
+				b.laser.get(i).draw(gc);
+			}
+			for (int i = 0; i < numBalls; i++) {
+				bullet[i].draw(gc);
+			}
+			for (int i = 0; i < b.bullet.size(); i++) {
+				b.bullet.get(i).draw(gc);
+			}
+			for (int i = 0; i < pbullet.size(); i++) {
+				pbullet.get(i).draw(gc);
+			}
+			b.draw(gc);
+			p.draw(gc);
+			barrier.draw(gc);
+			gc.drawImage(buffer, 0, 0); // double buffering
+		}
+	}
 }

@@ -4,9 +4,8 @@ public class Coordinates {
 
     private double x;
     private double y;
-    private int timer;
 
-    public Coordinates(double x, double y, int timer) {
+    public Coordinates(double x, double y) {
         super();
         this.setX(x);
         this.setY(y);
@@ -31,17 +30,12 @@ public class Coordinates {
     public void setY (double y) {
         this.y = y;
     }
-    public void setTimer (int timer) {
-        this.timer = timer;
-    }
     public double getX() {
         return x;
     }
     public double getY() {
         return y;
     }
-    public int getTimer() {
-        return timer;
-    }
+    
 
 }
