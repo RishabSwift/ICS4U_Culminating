@@ -1,6 +1,10 @@
 package culminating;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -30,8 +34,23 @@ public class Boss extends MovingObject {
 		switch 	(stgNum) {
 		case 1: color = Color.PURPLE;
 		speed = 10;
+		/*try {
+			Clip theme = AudioSystem.getClip();
+			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
+			theme.start();
+			theme.stop();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}*/
 		return;
 		case 2: color = Color.BLUE;
+		/*try {
+			Clip theme = AudioSystem.getClip();
+			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
+			theme.start();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}*/
 		speed = 10;
 		return;
 		case 3: color = Color.GREEN;

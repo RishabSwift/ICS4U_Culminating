@@ -10,7 +10,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class GameStage extends Stage {
 
@@ -79,7 +83,26 @@ public class GameStage extends Stage {
 
         //create the boss
         b = new Boss(900, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
+        if (b.stgNum == 1) {
+        	try {
+    			Clip theme = AudioSystem.getClip();
+    			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Sonic the Hedgehog 1 - Boss Theme.wav"))); //opens the given file for the clip
+    			theme.start();
 
+    		} catch (Exception e1) {
+    			e1.printStackTrace();
+    		}
+        }
+        else if (b.stgNum == 2) {
+        	try {
+    			Clip theme = AudioSystem.getClip();
+    			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
+    			theme.start();
+
+    		} catch (Exception e1) {
+    			e1.printStackTrace();
+    		}
+        }
         //Create the Player
         p = new Player(500, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
 
@@ -123,7 +146,15 @@ public class GameStage extends Stage {
 
         canvas.setOnMouseClicked(event -> {
             if (pbullet.size() < 5) {
-                PBullet bl = new PBullet(p.playerLocationX, p.playerLocationY, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
+            	try {
+					Clip theme = AudioSystem.getClip();
+					theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Fire 2.wav"))); //opens the given file for the clip
+					theme.start();
+
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+            	PBullet bl = new PBullet(p.playerLocationX, p.playerLocationY, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), false);
                 double xdist = event.getX() - p.playerLocationX;
                 double ydist = event.getY() - p.playerLocationY;
                 double dist = Math.sqrt(Math.pow(xdist, 2) + Math.pow(ydist, 2));
@@ -244,14 +275,38 @@ public class GameStage extends Stage {
         //TODO Rishab change the hit detection to fit graphics
         // player bullet hits boss
         for (int i = 0; i < pbullet.size(); i++) {
-            double xdif = pbullet.get(i).cx - b.cx;
+        	double xdif = pbullet.get(i).cx - b.cx;
             double ydif = pbullet.get(i).cy - b.cy;
             double rSum = pbullet.get(i).radius + b.radius;
             if (Math.abs(xdif) <= rSum && Math.abs(ydif) <= rSum) {
                 pbullet.remove(i);
+                try {
+					Clip theme = AudioSystem.getClip();
+					theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/sfx_damage_hit10.wav"))); //opens the given file for the clip
+					theme.start();
+
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
                 b.health.decrease(10);
             }
         }
+     // boss bullet hits barrier
+		for (int i = 0; i < b.bullet.size(); i++) {
+			for(int j = 0; j < barrier.c.size(); j++) {
+				double xdif = b.bullet.get(i).playerLocationX - barrier.c.get(j).getX();// p.xPoints[0];
+				double ydif = b.bullet.get(i).playerLocationY - barrier.c.get(j).getY();//p.yPoints[0];
+				double rad = b.bullet.get(i).radius;
+				if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+					b.bullet.remove(i);
+					return;
+					//barrier.clear();
+					//p.setColor(Color.WHITE);
+					//p.moving = false;
+					//p.dead = true;
+				}
+			}
+		}
         // boss bullet hits player
         for (int i = 0; i < b.bullet.size(); i++) {
             double xdif = b.bullet.get(i).playerLocationX - p.xPoints[0];
