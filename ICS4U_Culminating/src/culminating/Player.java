@@ -13,10 +13,11 @@ public class Player extends MovingObject{
 	double shrt = 7.5;
 	double lng = 30;
 	boolean dead = false;
-	
+	Health health;
+
 	public Player(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
-
+		health = new Health(100);
 		xPoints[0] =x- 5;
 		xPoints[1] =x;
 		xPoints[2] =x+ 5;

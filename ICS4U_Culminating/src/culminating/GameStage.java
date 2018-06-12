@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class GameStage extends Stage {
 
-    Timer _timer;
+	Timer _timer;
 
 	/**
 	 * Buffer for double buffering.
@@ -45,7 +45,7 @@ public class GameStage extends Stage {
 	boolean finished = false;
 	boolean isBarrierCreated = false, isBarrierBeingCreated = false;
 
-    Timer t = new Timer();
+	Timer t = new Timer();
 
 	GameStage() {
 
@@ -137,87 +137,84 @@ public class GameStage extends Stage {
 
 
 
-        canvas.setOnMouseDragged(event -> {
+		canvas.setOnMouseDragged(event -> {
 
-            if (isBarrierCreated) {
-                return;
-            }
+			if (isBarrierCreated) {
+				return;
+			}
 
-            System.out.println(isBarrierBeingCreated);
+			System.out.println(isBarrierBeingCreated);
 
-            Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
+			Coordinates c = new Coordinates(event.getX(), event.getY(), timer);
 
-            barrier.c.add(c);
-            isBarrierBeingCreated = true;
+			barrier.c.add(c);
+			isBarrierBeingCreated = true;
 
-        });
-        canvas.setOnMouseReleased(event -> {
-            if (!isBarrierCreated && isBarrierBeingCreated) {
-                t.startTimer();
-                isBarrierCreated = true;
-                isBarrierBeingCreated = false;
-            }
+		});
+		canvas.setOnMouseReleased(event -> {
+			if (!isBarrierCreated && isBarrierBeingCreated) {
+				t.startTimer();
+				isBarrierCreated = true;
+				isBarrierBeingCreated = false;
+			}
 
-        });
+		});
 
 
-        new Thread(new Runnable() {
-            /**
-             * Repaints the canvas periodically.
-             */
-            @Override
-            public void run() {
-                while (!finished) {
+		new Thread(new Runnable() {
+			/**
+			 * Repaints the canvas periodically.
+			 */
+			@Override
+			public void run() {
+				while (!finished) {
 
-                    if (isBarrierCreated) {
-                        if (t.hasBeenSeconds(3)) {
-                            isBarrierCreated = false;
-                            isBarrierBeingCreated = false;
-                            barrier.clear();
-                        }
-                    }
-                    if (p.dead) {
-                        finished = true;
-                    }
-                    if (b.health.isDead()) {
-                        if (b.stgNum == 6) {
-                            finished = true;
-                        } else {
-                            resetStg();
-                            pauseDuration = 8;
-                        }
-                    }
-                    if (b.stgNum == 4) {
-                        p.color = Color.WHITE;
-                        for (int j = 0; j < pbullet.size(); j++) {
-                            pbullet.get(j).color = Color.WHITE;
-                        }
-                    }
-                    for (int i = 0; i < b.bullet.size(); i++) {
-                        if (b.bullet.get(i).edge) {
-                            b.bullet.remove(i);
-                        }
-                    }
-                    for (int i = 0; i < pbullet.size(); i++) {
-                        if (pbullet.get(i).edge) {
-                            pbullet.remove(i);
-                        }
-                    }
-                    draw(gc);
-                    hitDetection();
-                    b.behavior(p.playerLocationX, p.playerLocationY);
-                    if (p.dead || b.health.isDead()) {
-                        draw(gc);
-//						if (b.health.isDead()) {
-//							resetStg();
-//						}
-                        pauseDuration = 1000;
-                    }
-                    try {
-                        Thread.sleep(pauseDuration);
-                    } catch (InterruptedException e) {
-                    }
-                }
+					if (isBarrierCreated) {
+						if (t.hasBeenSeconds(3)) {
+							isBarrierCreated = false;
+							isBarrierBeingCreated = false;
+							barrier.clear();
+						}
+					}
+					if (p.health.isDead()) {
+						finished = true;
+					}
+					if (b.health.isDead()) {
+						if (b.stgNum == 6) {
+							finished = true;
+						} else {
+							resetStg();
+							pauseDuration = 8;
+						}
+					}
+					if (b.stgNum == 4) {
+						p.color = Color.WHITE;
+						for (int j = 0; j < pbullet.size(); j++) {
+							pbullet.get(j).color = Color.WHITE;
+						}
+					}
+					for (int i = 0; i < b.bullet.size(); i++) {
+						if (b.bullet.get(i).edge) {
+							b.bullet.remove(i);
+						}
+					}
+					for (int i = 0; i < pbullet.size(); i++) {
+						if (pbullet.get(i).edge) {
+							pbullet.remove(i);
+						}
+					}
+					draw(gc);
+					hitDetection();
+					b.behavior(p.playerLocationX, p.playerLocationY);
+					if (p.health.isDead() || b.health.isDead()) {
+						draw(gc);
+						pauseDuration = 1000;
+					}
+					try {
+						Thread.sleep(pauseDuration);
+					} catch (InterruptedException e) {
+					}
+				}
 
 
 			}
@@ -232,7 +229,7 @@ public class GameStage extends Stage {
 		}
 
 		b.nextLv();
-		b.health.setHealth(10);
+		b.health.setHealth(100);
 		b.setX(100);
 		b.setY(100);
 		p.setX(500);
@@ -244,12 +241,42 @@ public class GameStage extends Stage {
 		//TODO Rishab change the hit detection to fit graphics
 		// player bullet hits boss
 		for (int i = 0; i < pbullet.size(); i++) {
-			double xdif = pbullet.get(i).cx - b.cx;
-			double ydif = pbullet.get(i).cy - b.cy;
+			double xdif = pbullet.get(i).cx - b.playerLocationX;
+			double ydif = pbullet.get(i).cy - b.playerLocationY;
 			double rSum = pbullet.get(i).radius + b.radius;
 			if (Math.abs(xdif) <= rSum && Math.abs(ydif) <= rSum) {
 				pbullet.remove(i);
 				b.health.decrease(10);
+			}
+		}
+		//laser hits player
+		for (int i = 0; i < b.laser.size(); i++) {
+			if (b.laser.get(i).fire) {
+				double rise = b.laser.get(i).y2 -  b.laser.get(i).y1;
+				double run = b.laser.get(i).x2 -  b.laser.get(i).x1;
+				double nXDirection = -rise;
+				double nYDirection = run;
+				double dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[0]) * nXDirection + 
+						(b.laser.get(i).y1 + p.yPoints[0]) * nYDirection)) 
+						/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
+				if (dist < b.laser.get(i).atkWidth) {
+					b.laser.remove(i);
+					p.health.decrease(5);
+				}
+				dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[1]) * nXDirection + 
+						(b.laser.get(i).y1 + p.yPoints[1]) * nYDirection)) 
+						/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
+				if (dist < b.laser.get(i).atkWidth) {
+					b.laser.remove(i);
+					p.health.decrease(5);
+				}
+				dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[2]) * nXDirection + 
+						(b.laser.get(i).y1 + p.yPoints[2]) * nYDirection)) 
+						/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
+				if (dist < b.laser.get(i).atkWidth) {
+					b.laser.remove(i);
+					p.health.decrease(5);
+				}
 			}
 		}
 		// boss bullet hits player
@@ -258,39 +285,47 @@ public class GameStage extends Stage {
 			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[0];
 			double rad = b.bullet.get(i).radius;
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
-				p.setColor(Color.WHITE);
-				p.moving = false;
-				p.dead = true;
+				p.health.decrease(10);
+				b.bullet.remove(i);
 			}
-		}
-		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[1];
-			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[1];
-			double rad = b.bullet.get(i).radius;
+			xdif = b.bullet.get(i).playerLocationX - p.xPoints[1];
+			ydif = b.bullet.get(i).playerLocationY - p.yPoints[1];
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
-				p.setColor(Color.WHITE);
-				p.moving = false;
-				p.dead = true;
+				p.health.decrease(10);
+				b.bullet.remove(i);
 			}
-		}
-		for (int i = 0; i < b.bullet.size(); i++) {
-			double xdif = b.bullet.get(i).playerLocationX - p.xPoints[2];
-			double ydif = b.bullet.get(i).playerLocationY - p.yPoints[2];
-			double rad = b.bullet.get(i).radius;
+			xdif = b.bullet.get(i).playerLocationX - p.xPoints[2];
+			ydif = b.bullet.get(i).playerLocationY - p.yPoints[2];
 			if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
-				p.setColor(Color.WHITE);
-				p.moving = false;
-				p.dead = true;
+				p.health.decrease(10);
+				b.bullet.remove(i);
 			}
 		}
+		
 		//player hits boss
+		double xdif = b.playerLocationX - p.xPoints[0];
+		double ydif = b.playerLocationY - p.yPoints[0];
+		double rad = b.radius;
+		if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+			p.health.decrease(10);
+		}
+		xdif = b.playerLocationX - p.xPoints[1];
+		ydif = b.playerLocationY - p.yPoints[1];
+		if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+			p.health.decrease(10);
+		}
+		xdif = b.playerLocationX - p.xPoints[2];
+		ydif = b.playerLocationY - p.yPoints[2];
+		if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+			p.health.decrease(10);
+		}
 	}
 
 	/**
 	 * Clears the screen and paints the balls.
 	 */
 	public void draw(GraphicsContext gc) {
-		if (p.dead) {
+		if (p.health.isDead()) {
 			gc.setFill(Color.BLACK);
 			gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 			gc.setFill(Color.WHITE);
@@ -317,22 +352,22 @@ public class GameStage extends Stage {
 			//gc.fillText("You die if a bullet hits you in any place other than the tip", 10, 50);
 
 
-            for (int i = 0; i < b.laser.size(); i++) {
-                b.laser.get(i).draw(gc);
-            }
-            for (int i = 0; i < numBalls; i++) {
-                bullet[i].draw(gc);
-            }
-            for (int i = 0; i < b.bullet.size(); i++) {
-                b.bullet.get(i).draw(gc);
-            }
-            for (int i = 0; i < pbullet.size(); i++) {
-                pbullet.get(i).draw(gc);
-            }
-            b.draw(gc);
-            p.draw(gc);
-            barrier.draw(gc);
-            gc.drawImage(buffer, 0, 0); // double buffering
-        }
-    }
+			for (int i = 0; i < b.laser.size(); i++) {
+				b.laser.get(i).draw(gc);
+			}
+			for (int i = 0; i < numBalls; i++) {
+				bullet[i].draw(gc);
+			}
+			for (int i = 0; i < b.bullet.size(); i++) {
+				b.bullet.get(i).draw(gc);
+			}
+			for (int i = 0; i < pbullet.size(); i++) {
+				pbullet.get(i).draw(gc);
+			}
+			b.draw(gc);
+			p.draw(gc);
+			barrier.draw(gc);
+			gc.drawImage(buffer, 0, 0); // double buffering
+		}
+	}
 }

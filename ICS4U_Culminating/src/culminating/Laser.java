@@ -24,7 +24,7 @@ public class Laser {
 	}
 
 	public void draw(GraphicsContext gc) {
-		gc.setStroke(color);
+		gc.setStroke(Color.YELLOW);
 		gc.setLineWidth(width);
 		gc.strokeLine(x1, y1, x2, y2);
 		animateOneStep();

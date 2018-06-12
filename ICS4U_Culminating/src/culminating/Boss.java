@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 
 public class Boss extends MovingObject {
 
-	int stgNum = 1;
+	int stgNum = 4;
 	int radius;
 	double cx;
 	double cy;
@@ -24,9 +24,9 @@ public class Boss extends MovingObject {
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
 		radius = 30;
-		this.cx = x - radius;
-		this.cy = y - radius;
-		health = new Health(10);
+		this.cx = x;
+		this.cy = y;
+		health = new Health(100);
 		switch 	(stgNum) {
 		case 1: color = Color.PURPLE;
 		speed = 10;
@@ -60,12 +60,12 @@ public class Boss extends MovingObject {
 		gc.fillText("" + coneCount, 10, 30);
 		gc.fillText("" + coneAtk, 10, 50);
 
-		//		gc.setStroke(color.BLACK);
-		//		gc.setLineWidth(5);
-		//		gc.strokeLine(x, y, x + 10000, y);
-		//		gc.strokeLine(x, y, x - 10000, y);
-		//		gc.strokeLine(x, y, x, y + 10000);
-		//		gc.strokeLine(x, y, x, y - 10000);
+				gc.setStroke(color.BLACK);
+				gc.setLineWidth(5);
+				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX + 10000, playerLocationY);
+				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX - 10000, playerLocationY);
+				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY + 10000);
+				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY - 10000);
 
 
 
@@ -74,7 +74,7 @@ public class Boss extends MovingObject {
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
-		movtBehavior(playerX, playerY);
+		//movtBehavior(playerX, playerY);
 
 	}
 
@@ -132,41 +132,63 @@ public class Boss extends MovingObject {
 			return;
 		case 3:
 			if (timeCount%100 == 0) {
-				atk1(45, true);
+				atk1(45, false);
 				if (timeCount%6 == 0 && !coneAtk) {
-					atk2(1, playerX, playerY, 20, 10, false);	
+					atk2(1, playerX, playerY, 20, 10, true);	
 				}
 
 			}
 			if (timeCount%15 == 0 && coneAtk) {
-				atk2(1, playerX, playerY, 20, 10, false);
+				atk2(1, playerX, playerY, 20, 10, true);
 			}
 			return;
 		case 4:
 			if (timeCount%100 == 0) {
-				atk1(45, true);
+				//atk1(45, false);
 				if (timeCount%3 == 0 && !coneAtk) {
-					atk2(2, playerX, playerY, 20, 10, false);	
+					atk2(2, playerX, playerY, 20, 10, true);	
 				}
 
 			}
 			if (timeCount%15 == 0 && coneAtk) {
-				atk2(2, playerX, playerY, 20, 10, false);
+				atk2(2, playerX, playerY, 20, 10, true);
+			}
+			return;
+		case 5:
+			if (timeCount%100 == 0) {
+				atk1(45, true);
+				if (timeCount%3 == 0 && !coneAtk) {
+					atk2(1, playerX, playerY, 20, 10, true);	
+				}
+
+			}
+			if (timeCount%15 == 0 && coneAtk) {
+				atk2(1, playerX, playerY, 20, 10, true);
 			}
 			if (timeCount%300 == 0) {
 				atk3(playerX, playerY);
 			}
 			return;
-		case 5:
-			atk1(45, true);
-			atk2(2, playerX, playerY, 5, 20, false);
-			atk3(playerX, playerY);
-			return;
 		case 6:
-			atk1(45, true);
-			atk2(1, playerX, playerY, 5, 20, true);
-			atk2(2, playerX, playerY, 5, 20, false);
-			atk3(playerX, playerY);
+			if (timeCount%100 == 0) {
+				atk1(45, true);
+				if (timeCount%3 == 0 && !coneAtk) {
+					atk2(1, playerX, playerY, 20, 10, true);	
+				}
+				if (timeCount%5 == 0 && !coneAtk) {
+					atk2(2, playerX, playerY, 20, 10, true);	
+				}
+
+			}
+			if (timeCount%15 == 0 && coneAtk) {
+				atk2(1, playerX, playerY, 20, 10, true);
+			}
+			if (timeCount%15 == 0 && coneAtk) {
+				atk2(2, playerX, playerY, 20, 10, true);
+			}
+			if (timeCount%300 == 0) {
+				atk3(playerX, playerY);
+			}
 			return;
 		}
 	}
@@ -190,19 +212,14 @@ public class Boss extends MovingObject {
 		case 1: color = Color.PURPLE;
 		return;
 		case 2: color = Color.BLUE;
-		health.setHealth(10);
 		return;
 		case 3: color = Color.GREEN;
-		health.setHealth(10);
 		return;
 		case 4: color = Color.YELLOW;
-		health.setHealth(10);
 		return;
 		case 5: color = Color.ORANGE;
-		health.setHealth(10);
 		return;
 		case 6: color = Color.RED;
-		health.setHealth(10);
 		return;
 		}
 	}
@@ -211,7 +228,7 @@ public class Boss extends MovingObject {
 		//balls in many directions
 		for (int i = 0; i < 360; i++) {
 			if (i % angle == 0) {
-				Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
+				Bullet bu = new Bullet(playerLocationX, playerLocationY, left, right, top, bottom, bounce);
 
 				if (angle > 45 && angle < 135  ||  angle > 225 && angle < 315) {
 					bu.ySpeed = Math.cos(Math.toRadians(i)) * 10;
