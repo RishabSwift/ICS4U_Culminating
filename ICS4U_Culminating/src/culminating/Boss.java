@@ -27,8 +27,21 @@ public class Boss extends MovingObject {
 		this.cx = x;
 		this.cy = y;
 		health = new Health(100);
-		color = Color.PURPLE;
 		speed = 10;
+		switch 	(stgNum) {
+		case 1: color = Color.PURPLE;
+		return;
+		case 2: color = Color.BLUE;
+		return;
+		case 3: color = Color.GREEN;
+		return;
+		case 4: color = Color.YELLOW;
+		return;
+		case 5: color = Color.ORANGE;
+		return;
+		case 6: color = Color.RED;
+		return;
+		}
 	}
 
 	@Override
