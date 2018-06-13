@@ -44,6 +44,7 @@ public class GameStage extends Stage {
 	Barrier barrier = new Barrier();
 	boolean finished = false;
 	boolean isBarrierCreated = false, isBarrierBeingCreated = false;
+	Color bulletColor = Color.BLACK;
 
 	Timer t = new Timer();
 
@@ -130,7 +131,7 @@ public class GameStage extends Stage {
 				int cycleNum = (int) dist / 10;
 				bl.setXSpeed(xdist / cycleNum);
 				bl.setYSpeed(ydist / cycleNum);
-				bl.color = Color.BLACK;
+				bl.setColor(bulletColor);
 				pbullet.add(bl);
 			}
 		});
@@ -188,10 +189,7 @@ public class GameStage extends Stage {
 						}
 					}
 					if (b.stgNum == 4) {
-						p.color = Color.WHITE;
-						for (int j = 0; j < pbullet.size(); j++) {
-							pbullet.get(j).color = Color.WHITE;
-						}
+						p.setColor(Color.WHITE);
 					}
 					for (int i = 0; i < b.bullet.size(); i++) {
 						if (b.bullet.get(i).edge) {
@@ -205,6 +203,11 @@ public class GameStage extends Stage {
 					}
 					draw(gc);
 					hitDetection();
+					for (int i = 0; i < b.laser.size(); i++) {
+						if (b.laser.get(i).fire) {
+							b.laser.remove(i);
+						}
+					}
 					b.behavior(p.playerLocationX, p.playerLocationY);
 					if (p.health.isDead() || b.health.isDead()) {
 						draw(gc);
@@ -227,14 +230,21 @@ public class GameStage extends Stage {
 		for (int i = 0; i < pbullet.size(); i++) {
 			pbullet.remove(i);
 		}
-
+		
 		b.nextLv();
 		b.health.setHealth(100);
 		b.setX(100);
 		b.setY(100);
 		p.setX(500);
 		p.setX(500);
-
+		if (b.stgNum == 4) {
+			bulletColor = Color.WHITE;
+			p.setColor(Color.WHITE);
+		}
+		if (b.stgNum == 5) {
+			bulletColor = Color.BLACK;
+			p.setColor(Color.BLACK);
+		}
 	}
 
 	public void hitDetection() {
@@ -249,33 +259,39 @@ public class GameStage extends Stage {
 				b.health.decrease(10);
 			}
 		}
-		//laser hits player
+		//laser hits player 
 		for (int i = 0; i < b.laser.size(); i++) {
 			if (b.laser.get(i).fire) {
 				double rise = b.laser.get(i).y2 -  b.laser.get(i).y1;
 				double run = b.laser.get(i).x2 -  b.laser.get(i).x1;
 				double nXDirection = -rise;
 				double nYDirection = run;
-				double dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[0]) * nXDirection + 
-						(b.laser.get(i).y1 + p.yPoints[0]) * nYDirection)) 
+				double dist = (Math.abs((b.laser.get(i).x1 - p.xPoints[0]) * nXDirection + 
+						(b.laser.get(i).y1 - p.yPoints[0]) * nYDirection)) 
 						/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
+
+				//System.out.println(dist);
 				if (dist < b.laser.get(i).atkWidth) {
 					b.laser.remove(i);
 					p.health.decrease(5);
 				}
-				dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[1]) * nXDirection + 
-						(b.laser.get(i).y1 + p.yPoints[1]) * nYDirection)) 
-						/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
-				if (dist < b.laser.get(i).atkWidth) {
-					b.laser.remove(i);
-					p.health.decrease(5);
-				}
-				dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[2]) * nXDirection + 
-						(b.laser.get(i).y1 + p.yPoints[2]) * nYDirection)) 
-						/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
-				if (dist < b.laser.get(i).atkWidth) {
-					b.laser.remove(i);
-					p.health.decrease(5);
+				else {
+					dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[1]) * nXDirection + 
+							(b.laser.get(i).y1 + p.yPoints[1]) * nYDirection)) 
+							/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
+					if (dist < b.laser.get(i).atkWidth) {
+						b.laser.remove(i);
+						p.health.decrease(5);
+					}
+					else {
+						dist = (Math.abs((b.laser.get(i).x1 + p.xPoints[2]) * nXDirection + 
+								(b.laser.get(i).y1 + p.yPoints[2]) * nYDirection)) 
+								/(Math.sqrt(Math.pow(nXDirection, 2) + Math.pow(nYDirection, 2)));
+						if (dist < b.laser.get(i).atkWidth) {
+							b.laser.remove(i);
+							p.health.decrease(5);
+						}
+					}
 				}
 			}
 		}
@@ -301,7 +317,7 @@ public class GameStage extends Stage {
 				b.bullet.remove(i);
 			}
 		}
-		
+
 		//player hits boss
 		double xdif = b.playerLocationX - p.xPoints[0];
 		double ydif = b.playerLocationY - p.yPoints[0];
@@ -347,7 +363,9 @@ public class GameStage extends Stage {
 			}
 			gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 			gc.setFill(Color.BLACK);
-			gc.fillText("" + finished, 10, 10);
+			Font small = new Font(10);
+			gc.setFont(small);
+			//gc.fillText("" + + p.health.getHealth(), 10, 10);
 			//gc.fillText("Use 'W,A,S,D' and the mouse to move the triangle", 10, 30);
 			//gc.fillText("You die if a bullet hits you in any place other than the tip", 10, 50);
 

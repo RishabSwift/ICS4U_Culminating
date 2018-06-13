@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 
 public class Boss extends MovingObject {
 
-	int stgNum = 4;
+	int stgNum = 3;
 	int radius;
 	double cx;
 	double cy;
@@ -27,26 +27,8 @@ public class Boss extends MovingObject {
 		this.cx = x;
 		this.cy = y;
 		health = new Health(100);
-		switch 	(stgNum) {
-		case 1: color = Color.PURPLE;
+		color = Color.PURPLE;
 		speed = 10;
-		return;
-		case 2: color = Color.BLUE;
-		speed = 10;
-		return;
-		case 3: color = Color.GREEN;
-		speed = 10;
-		return;
-		case 4: color = Color.YELLOW;
-		speed = 30;
-		return;
-		case 5: color = Color.ORANGE;
-		speed = 5;
-		return;
-		case 6: color = Color.RED;
-		speed = 10;
-		return;
-		}
 	}
 
 	@Override
@@ -57,15 +39,15 @@ public class Boss extends MovingObject {
 		int drawY = (int) cy;
 		gc.setFill(color);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
-		gc.fillText("" + coneCount, 10, 30);
-		gc.fillText("" + coneAtk, 10, 50);
+		//gc.fillText("" + coneCount, 10, 30);
+		//gc.fillText("" + coneAtk, 10, 50);
 
-				gc.setStroke(color.BLACK);
-				gc.setLineWidth(5);
-				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX + 10000, playerLocationY);
-				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX - 10000, playerLocationY);
-				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY + 10000);
-				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY - 10000);
+		//				gc.setStroke(color.BLACK);
+		//				gc.setLineWidth(5);
+		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX + 10000, playerLocationY);
+		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX - 10000, playerLocationY);
+		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY + 10000);
+		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY - 10000);
 
 
 
@@ -74,7 +56,7 @@ public class Boss extends MovingObject {
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
-		//movtBehavior(playerX, playerY);
+		movtBehavior(playerX, playerY);
 
 	}
 
@@ -83,34 +65,36 @@ public class Boss extends MovingObject {
 			xSpeed = 0;
 			ySpeed = 0;
 		}
-		switch 	(stgNum) {
-		case 1:
-			if (timeCount%100 == 0) {
-				move1();
-			}
-			return;
-		case 2:
-			if (timeCount%100 == 0) {
-				move1();
-			}			return;
-		case 3:
-			//sniper
-			if (timeCount%100 == 0) {
-				move1();
-			}			return;
-		case 4:
-			//charger
-			if (timeCount%100 == 0) {
-				move1();
-			}			return;
-		case 5:
-			//slow mover
-			if (timeCount%100 == 0) {
-				move1();
-			}			return;
-		case 6: 
-			if (timeCount%100 == 0) {
-				move1();
+		else {
+			switch 	(stgNum) {
+			case 1:
+				if (timeCount%100 == 0) {
+					move1();
+				}
+				return;
+			case 2:
+				if (timeCount%100 == 0) {
+					move1();
+				}			return;
+			case 3:
+				//sniper
+				if (timeCount%100 == 0) {
+					move1();
+				}			return;
+			case 4:
+				//charger
+				if (timeCount%100 == 0) {
+					move1();
+				}			return;
+			case 5:
+				//slow mover
+				if (timeCount%100 == 0) {
+					move1();
+				}			return;
+			case 6: 
+				if (timeCount%100 == 0) {
+					move1();
+				}
 			}
 		}
 	}
@@ -144,7 +128,7 @@ public class Boss extends MovingObject {
 			return;
 		case 4:
 			if (timeCount%100 == 0) {
-				//atk1(45, false);
+				atk1(45, false);
 				if (timeCount%3 == 0 && !coneAtk) {
 					atk2(2, playerX, playerY, 20, 10, true);	
 				}
@@ -303,6 +287,7 @@ public class Boss extends MovingObject {
 			coneAtk = false;
 		}
 	}
+
 	public void atk3(double tx, double ty) {
 		laserAtk = true;
 		//line laser
