@@ -1,6 +1,8 @@
 package culminating;
 
 import com.sun.javaws.progress.Progress;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -75,7 +78,15 @@ public class GameStage extends Stage {
 
         bossHealthProgress = new ProgressBar(100);
         playerHealthProgress = new ProgressBar(100);
-        group.getChildren().addAll(canvas, bossHealthProgress);
+
+        bossHealthProgress.setLayoutX(50);
+        bossHealthProgress.setLayoutY(10);
+
+        Text bossHealthText = new Text(50, 45, "Enemy Health");
+        Text playerHealthText = new Text(MainApp.GAME_WIDTH - 50, 45, "Your Health");
+
+
+        group.getChildren().addAll(canvas, bossHealthProgress, bossHealthText, playerHealthText);
 
         bossHealthProgress.progressProperty().unbind();
 
@@ -380,7 +391,6 @@ public class GameStage extends Stage {
                 @Override
                 protected Void call() throws Exception {
 
-                    System.out.println("hello");
                     while (b.health.getHealth() > 0) {
                         System.out.println("in loop");
                         updateProgress(b.health.getHealth(), 100);
