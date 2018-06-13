@@ -11,13 +11,16 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class GameStage extends Stage {
-
+	Clip opening = null, boss1 = null, boss2 = null, boss3 = null, boss4 = null, boss5 = null, boss6 = null;
     Timer _timer;
 
     /**
@@ -48,9 +51,9 @@ public class GameStage extends Stage {
     Barrier barrier = new Barrier();
     boolean finished = false;
     boolean isBarrierCreated = false, isBarrierBeingCreated = false;
-
+    
     Timer t = new Timer();
-
+    
     GameStage() {
 
         this.setTitle(MainApp.GAME_NAME);
@@ -72,6 +75,34 @@ public class GameStage extends Stage {
     }
 
     public void startGame(Canvas canvas, GraphicsContext gc) {
+			
+			try {
+				//opening = AudioSystem.getClip();
+				//opening.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
+				//opening.start();
+				boss1 = AudioSystem.getClip();
+				boss1.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Sonic the Hedgehog 1 - Boss Theme.wav"))); //opens the given file for the clip
+				boss1.start();
+				boss2 = AudioSystem.getClip();
+				boss2.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav")));
+				boss3 = AudioSystem.getClip();
+				boss3.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Zelda - A Link to the Past - Boss Theme.wav")));
+				boss4 = AudioSystem.getClip();
+				boss4.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Super Smash Bros Brawl - Battlefield - Melee.wav")));
+				boss5 = AudioSystem.getClip();
+				boss5.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Pokemon Conquest - Boss Battle.wav")));
+				boss6 = AudioSystem.getClip();
+				boss6.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Super Smash Bros Melee Orchestra - Planet Corneria.wav")));
+			} catch (LineUnavailableException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
         //create the balls for the game
         for (int i = 0; i < numBalls; i++) {
@@ -83,26 +114,6 @@ public class GameStage extends Stage {
 
         //create the boss
         b = new Boss(900, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
-        if (b.stgNum == 1) {
-        	try {
-    			Clip theme = AudioSystem.getClip();
-    			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Sonic the Hedgehog 1 - Boss Theme.wav"))); //opens the given file for the clip
-    			theme.start();
-
-    		} catch (Exception e1) {
-    			e1.printStackTrace();
-    		}
-        }
-        else if (b.stgNum == 2) {
-        	try {
-    			Clip theme = AudioSystem.getClip();
-    			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
-    			theme.start();
-
-    		} catch (Exception e1) {
-    			e1.printStackTrace();
-    		}
-        }
         //Create the Player
         p = new Player(500, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
 
@@ -268,6 +279,26 @@ public class GameStage extends Stage {
         b.setY(100);
         p.setX(500);
         p.setX(500);
+        if (b.stgNum == 2) {
+        	boss1.stop();
+        	boss2.start();
+        }
+        else if (b.stgNum == 3) {
+        	boss2.stop();
+        	boss3.start();
+        }
+        else if (b.stgNum == 4) {
+        	boss3.stop();
+        	boss4.start();
+        }
+        else if (b.stgNum == 5) {
+        	boss4.stop();
+        	boss5.start();
+        }
+        else if (b.stgNum == 6) {
+        	boss5.stop();
+        	boss6.start();
+        }
 
     }
 
