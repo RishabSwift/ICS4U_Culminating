@@ -1,6 +1,7 @@
 package culminating;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This class implements a flashing bullet. Feel free to change this, implement a
@@ -75,16 +76,27 @@ public class PBullet extends MovingObject {
 	/**
 	 * Draws the bullet
 	 * 
-	 * @param g
+	 * @param gc
 	 *            The graphics context.
 	 */
 	public void draw(GraphicsContext gc) {
-		int drawX = (int) playerLocationX - radius;
-		int drawY = (int) playerLocationY - radius;
-		this.cx = playerLocationX - radius;
-		this.cy = playerLocationY - radius;
-		gc.setFill(color.BLACK);
-		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
+		draw(gc, Color.BLACK);
 
 	}
+
+    /**
+     * Draws the bullet
+     *
+     * @param gc
+     *            The graphics context.
+     */
+    public void draw(GraphicsContext gc, Color color) {
+        int drawX = (int) playerLocationX - radius;
+        int drawY = (int) playerLocationY - radius;
+        this.cx = playerLocationX - radius;
+        this.cy = playerLocationY - radius;
+        gc.setFill(color);
+        gc.fillOval(drawX, drawY, radius * 2, radius * 2);
+
+    }
 }
