@@ -15,6 +15,8 @@ public class MainStageController {
     private Button buttonLoadGame;
     @FXML
     private Button buttonExitGame;
+    @FXML
+    private ImageView backgroundImage;
 
 
     /**
@@ -36,6 +38,10 @@ public class MainStageController {
         setButtonStyle(buttonLoadGame, imageLoadGame, imageLoadGameHover, imageLoadGameClicked);
         setButtonStyle(buttonExitGame, imageExitGame, imageExitGameHover, imageExitGameClicked);
 
+        backgroundImage.setFitWidth(MainApp.GAME_WIDTH);
+        buttonNewGame.setLayoutX((MainApp.GAME_WIDTH / 2));
+        buttonLoadGame.setLayoutX((MainApp.GAME_WIDTH / 2));
+        buttonExitGame.setLayoutX((MainApp.GAME_WIDTH / 2));
     }
 
     @FXML

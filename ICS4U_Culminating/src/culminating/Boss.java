@@ -28,10 +28,9 @@ public class Boss extends MovingObject {
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
 		radius = 30;
-		this.cx = x;
-		this.cy = y;
+		this.cx = x - radius;
+		this.cy = y - radius;
 		health = new Health(100);
-		speed = 10;
 		switch 	(stgNum) {
 		case 1: color = Color.PURPLE;
 		speed = 10;
@@ -90,7 +89,7 @@ public class Boss extends MovingObject {
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
-		movtBehavior(playerX, playerY);
+//		movtBehavior(playerX, playerY);
 
 	}
 
