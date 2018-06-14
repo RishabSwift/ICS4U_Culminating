@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 
 public class Boss extends MovingObject {
 
-	int stgNum = 3;
+	int stgNum = 1;
 	int radius;
 	double cx;
 	double cy;
@@ -89,7 +89,7 @@ public class Boss extends MovingObject {
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
-//		movtBehavior(playerX, playerY);
+		movtBehavior(playerX, playerY);
 
 	}
 
@@ -110,17 +110,14 @@ public class Boss extends MovingObject {
 					move1();
 				}			return;
 			case 3:
-				//sniper
 				if (timeCount%100 == 0) {
 					move1();
 				}			return;
 			case 4:
-				//charger
 				if (timeCount%100 == 0) {
 					move1();
 				}			return;
 			case 5:
-				//slow mover
 				if (timeCount%100 == 0) {
 					move1();
 				}			return;
@@ -163,12 +160,12 @@ public class Boss extends MovingObject {
 			if (timeCount%100 == 0) {
 				atk1(45, false);
 				if (timeCount%3 == 0 && !coneAtk) {
-					atk2(2, playerX, playerY, 20, 10, true);	
+					atk2(2, playerX, playerY, 5, 10, true);	
 				}
 
 			}
 			if (timeCount%15 == 0 && coneAtk) {
-				atk2(2, playerX, playerY, 20, 10, true);
+				atk2(2, playerX, playerY, 5, 10, true);
 			}
 			return;
 		case 5:
@@ -193,7 +190,7 @@ public class Boss extends MovingObject {
 					atk2(1, playerX, playerY, 20, 10, true);	
 				}
 				if (timeCount%5 == 0 && !coneAtk) {
-					atk2(2, playerX, playerY, 20, 10, true);	
+					atk2(2, playerX, playerY, 5, 10, true);	
 				}
 
 			}
@@ -201,7 +198,7 @@ public class Boss extends MovingObject {
 				atk2(1, playerX, playerY, 20, 10, true);
 			}
 			if (timeCount%15 == 0 && coneAtk) {
-				atk2(2, playerX, playerY, 20, 10, true);
+				atk2(2, playerX, playerY, 5, 10, true);
 			}
 			if (timeCount%300 == 0) {
 				atk3(playerX, playerY);
@@ -349,19 +346,5 @@ public class Boss extends MovingObject {
 		//random movement
 		xSpeed = (speed - (Math.random() * 20));
 		ySpeed = (speed - (Math.random() * 20));
-	}
-	public void move2() {
-		//farther
-	}
-
-	public void move3() {
-		//closer
-
-	}
-	public void move4() {
-		//dodge
-	}
-	public void move5() {
-		//teleport
 	}
 }
