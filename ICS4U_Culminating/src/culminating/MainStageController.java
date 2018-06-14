@@ -2,9 +2,11 @@ package culminating;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class MainStageController {
@@ -12,11 +14,11 @@ public class MainStageController {
     @FXML
     private Button buttonNewGame;
     @FXML
-    private Button buttonLoadGame;
-    @FXML
     private Button buttonExitGame;
     @FXML
     private ImageView backgroundImage;
+    @FXML
+    private AnchorPane anchorPane;
 
 
     /**
@@ -27,21 +29,15 @@ public class MainStageController {
         Image imageNewGame = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_NewGame.png"));
         Image imageNewGameHover = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_NewGameHover.png"));
         Image imageNewGameClicked = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_NewGameClicked.png"));
-        Image imageLoadGame = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_LoadGame.png"));
-        Image imageLoadGameHover = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_LoadGameHover.png"));
-        Image imageLoadGameClicked = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_LoadGameClicked.png"));
         Image imageExitGame = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_ExitGame.png"));
         Image imageExitGameHover = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_ExitGameHover.png"));
         Image imageExitGameClicked = new Image(getClass().getResourceAsStream("/assets/images/buttons/button_ExitGameClicked.png"));
 
         setButtonStyle(buttonNewGame, imageNewGame, imageNewGameHover, imageNewGameClicked);
-        setButtonStyle(buttonLoadGame, imageLoadGame, imageLoadGameHover, imageLoadGameClicked);
         setButtonStyle(buttonExitGame, imageExitGame, imageExitGameHover, imageExitGameClicked);
 
         backgroundImage.setFitWidth(MainApp.GAME_WIDTH);
-        buttonNewGame.setLayoutX((MainApp.GAME_WIDTH / 2));
-        buttonLoadGame.setLayoutX((MainApp.GAME_WIDTH / 2));
-        buttonExitGame.setLayoutX((MainApp.GAME_WIDTH / 2));
+
     }
 
     @FXML

@@ -40,8 +40,6 @@ public class Player extends MovingObject{
      */
     public void draw(GraphicsContext gc) {
 
-//        Image imageNewGame = new Image(getClass().getResourceAsStream("/assets/images/car.png"));
-
         double xdiff = mouseLocationX - playerLocationX;
         double ydiff = mouseLocationY - playerLocationY;
 

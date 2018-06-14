@@ -1,13 +1,9 @@
 package culminating;
 
-import com.sun.javaws.progress.Progress;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -18,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -28,6 +25,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class GameStage extends Stage {
 
     Timer _timer;
@@ -68,7 +66,8 @@ public class GameStage extends Stage {
 
     Timer t = new Timer();
 
-    TaskService service;
+    BossProgressTaskService bossHealthBossProgressTaskService;
+    PlayerProgressTaskService playerHealthBossProgressTaskService;
 
     GameStage() {
 
@@ -89,24 +88,30 @@ public class GameStage extends Stage {
 
         bossHealthProgress.setLayoutX(50);
         bossHealthProgress.setLayoutY(10);
+        bossHealthProgress.setMinWidth(150);
+        Text bossHealthText = new Text(80, 45, "Enemy Health");
 
-        Text bossHealthText = new Text(50, 45, "Enemy Health");
-        Text playerHealthText = new Text(MainApp.GAME_WIDTH - 50, 45, "Your Health");
+        playerHealthProgress.setMinWidth(150);
+        playerHealthProgress.setLayoutX(MainApp.GAME_WIDTH - 180);
+        playerHealthProgress.setLayoutY(10);
+        Text playerHealthText = new Text(MainApp.GAME_WIDTH - 150, 45, "Your Health");
 
 
-        group.getChildren().addAll(canvas, bossHealthProgress, bossHealthText, playerHealthText);
+        group.getChildren().addAll(canvas, bossHealthProgress, playerHealthProgress, bossHealthText, playerHealthText);
 
         bossHealthProgress.progressProperty().unbind();
+        playerHealthProgress.progressProperty().unbind();
 
-
-        service = new TaskService();
-        bossHealthProgress.progressProperty().bind(service.progressProperty());
+        bossHealthBossProgressTaskService = new BossProgressTaskService();
+        bossHealthProgress.progressProperty().bind(bossHealthBossProgressTaskService.progressProperty());
+        playerHealthBossProgressTaskService = new PlayerProgressTaskService();
+        playerHealthProgress.progressProperty().bind(playerHealthBossProgressTaskService.progressProperty());
 
 
         this.setScene(new Scene(group));
         this.show();
-        service.start();
-
+        bossHealthBossProgressTaskService.start();
+        playerHealthBossProgressTaskService.start();
 
     }
 
@@ -312,23 +317,33 @@ public class GameStage extends Stage {
         b.setY(100);
         p.setX(500);
         p.setX(500);
-        if (b.stgNum == 2) {
-            boss1.stop();
-            boss2.start();
-        } else if (b.stgNum == 3) {
-            boss2.stop();
-            boss3.start();
-        } else if (b.stgNum == 4) {
-            boss3.stop();
-            boss4.start();
-        } else if (b.stgNum == 5) {
-            boss4.stop();
-            boss5.start();
-        } else if (b.stgNum == 6) {
-            boss5.stop();
-            boss6.start();
-        }
+//        if (b.stgNum == 2) {
+//            boss1.stop();
+//            boss2.start();
+//        } else if (b.stgNum == 3) {
+//            boss2.stop();
+//            boss3.start();
+//        } else if (b.stgNum == 4) {
+//            boss3.stop();
+//            boss4.start();
+//        } else if (b.stgNum == 5) {
+//            boss4.stop();
+//            boss5.start();
+//        } else if (b.stgNum == 6) {
+//            boss5.stop();
+//            boss6.start();
+//        }
 
+        resetBossHealth();
+    }
+
+    public void resetBossHealth() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                bossHealthBossProgressTaskService.restart();
+            }
+        });
     }
 
 
@@ -434,19 +449,18 @@ public class GameStage extends Stage {
      */
     public void draw(GraphicsContext gc) {
         if (p.health.isDead()) {
-            gc.setFill(Color.BLACK);
-            gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-            gc.setFill(Color.WHITE);
-            Font big = new Font(80);
-            gc.setFont(big);
-            gc.fillText("You Died", 800, 500);
+            fillScreenWithText("You Died", gc);
+            try {
+                Thread.sleep(2000);
+                Platform.runLater(() -> {
+                   this.close();
+                });
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else if (b.health.isDead()) {
-            gc.setFill(Color.BLACK);
-            gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-            gc.setFill(Color.WHITE);
-            Font big = new Font(80);
-            gc.setFont(big);
-            gc.fillText("Stage Won", 800, 500);
+            fillScreenWithText("Stage Won", gc);
         } else {
             if (b.stgNum == 4) {
                 gc.setFill(Color.BLACK);
@@ -481,7 +495,18 @@ public class GameStage extends Stage {
     }
 
 
-    private class TaskService extends Service<Void> {
+    private void fillScreenWithText(String text, GraphicsContext gc) {
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.WHITE);
+        Font big = new Font(80);
+        gc.setFont(big);
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setTextBaseline(VPos.CENTER);
+        gc.fillText(text, MainApp.GAME_WIDTH / 2, MainApp.GAME_HEIGHT / 2);
+    }
+
+    private class BossProgressTaskService extends Service<Void> {
 
         @Override
         protected Task<Void> createTask() {
@@ -491,11 +516,36 @@ public class GameStage extends Stage {
                 protected Void call() throws Exception {
 
                     while (b.health.getHealth() > 0) {
-                        System.out.println("in loop");
+                        if (finished) {
+                            return null;
+                        }
                         updateProgress(b.health.getHealth(), 100);
                     }
 
-                    System.out.println("ended bro");
+                    return null;
+
+                }
+            };
+            return task;
+        }
+    }
+
+    private class PlayerProgressTaskService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+            Task<Void> task = new Task<Void>() {
+
+                @Override
+                protected Void call() throws Exception {
+
+                    while (p.health.getHealth() > 0) {
+                        if (finished) {
+                            return null;
+                        }
+                        updateProgress(p.health.getHealth(), 100);
+                    }
+
                     return null;
 
                 }
