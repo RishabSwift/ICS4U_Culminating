@@ -28,8 +28,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class GameStage extends Stage {
 
-    Timer _timer;
-
     /**
      * Buffer for double buffering.
      */
@@ -250,6 +248,7 @@ public class GameStage extends Stage {
             public void run() {
                 while (!finished) {
 
+
                     if (isBarrierCreated) {
                         if (t.hasBeenSeconds(3)) {
                             isBarrierCreated = false;
@@ -270,6 +269,8 @@ public class GameStage extends Stage {
                     }
                     if (b.stgNum == 4) {
                         p.setColor(Color.WHITE);
+                    } else {
+                        p.setColor(Color.BLACK);
                     }
                     for (int i = 0; i < b.bullet.size(); i++) {
                         if (b.bullet.get(i).edge) {
@@ -485,7 +486,12 @@ public class GameStage extends Stage {
                 b.bullet.get(i).draw(gc);
             }
             for (int i = 0; i < pbullet.size(); i++) {
-                pbullet.get(i).draw(gc);
+
+                if (b.stgNum == 4) {
+                    pbullet.get(i).draw(gc, Color.WHITE);
+                } else {
+                    pbullet.get(i).draw(gc);
+                }
             }
             b.draw(gc);
             p.draw(gc);

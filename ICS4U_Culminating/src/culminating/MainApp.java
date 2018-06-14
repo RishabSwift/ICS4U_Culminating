@@ -9,7 +9,7 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    public static String GAME_NAME = "The Best Singerss";
+    public static String GAME_NAME = "Triangle Rush";
     public static int GAME_WIDTH = 1280;
     public static int GAME_HEIGHT = 800;
 

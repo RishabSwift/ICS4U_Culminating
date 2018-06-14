@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 
 public class Boss extends MovingObject {
 
-	int stgNum = 3;
+	int stgNum = 1;
 	int radius;
 	double cx;
 	double cy;
