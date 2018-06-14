@@ -122,18 +122,18 @@ public class GameStage extends Stage {
             //opening.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
             //opening.start();
             boss1 = AudioSystem.getClip();
-            boss1.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Sonic the Hedgehog 1 - Boss Theme.wav"))); //opens the given file for the clip
+            boss1.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/sonic_boss_theme.wav"))); //opens the given file for the clip
             boss1.start();
             boss2 = AudioSystem.getClip();
-            boss2.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav")));
+            boss2.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/aladdin_boss_theme.wav")));
             boss3 = AudioSystem.getClip();
-            boss3.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Zelda - A Link to the Past - Boss Theme.wav")));
+            boss3.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/zelda_boss_theme.wav")));
             boss4 = AudioSystem.getClip();
-            boss4.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Super Smash Bros Brawl - Battlefield - Melee.wav")));
+            boss4.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/smash_boss_theme.wav")));
             boss5 = AudioSystem.getClip();
-            boss5.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Pokemon Conquest - Boss Battle.wav")));
+            boss5.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/pokemon_boss_theme.wav")));
             boss6 = AudioSystem.getClip();
-            boss6.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Super Smash Bros Melee Orchestra - Planet Corneria.wav")));
+            boss6.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/opening2.wav")));
         } catch (LineUnavailableException e2) {
             // TODO Auto-generated catch block
             e2.printStackTrace();
@@ -200,7 +200,7 @@ public class GameStage extends Stage {
             if (pbullet.size() < 5) {
                 try {
                     Clip theme = AudioSystem.getClip();
-                    theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Fire 2.wav"))); //opens the given file for the clip
+                    theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/fire2.wav"))); //opens the given file for the clip
                     theme.start();
 
                 } catch (Exception e1) {

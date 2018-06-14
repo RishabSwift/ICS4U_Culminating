@@ -14,9 +14,15 @@ public class Barrier {
 
 	public void draw(GraphicsContext gc) {
 		this.gc = gc;
+		int y = 0;
+		int x = 0;
+		int b = 0;
+		double m = 0;
+		
 		//gc.setFill(Color.RED);
 		gc.setStroke(Color.RED);
 		for (int i = 0; i < c.size()-1; i++) {
+			m = (c.get(i+1).getY() - c.get(i).getY())/(c.get(i+1).getX() - c.get(i).getX());
 			gc.strokeLine(c.get(i).getX(), c.get(i).getY(), c.get(i+1).getX(), c.get(i+1).getY());
 		}
 		gc.setStroke(Color.BLACK);
