@@ -5,18 +5,19 @@ import javafx.scene.image.Image;
 
 public class Player extends MovingObject{
 
-    int base;
-    double[] xPoints = new double[3];
-    double[] yPoints = new double[3];
-    double mouseLocationX;
-    double mouseLocationY;
-    double shrt = 7.5;
-    double lng = 30;
-    boolean dead = false;
+	int base;
+	double[] xPoints = new double[3];
+	double[] yPoints = new double[3];
+	double mouseLocationX;
+	double mouseLocationY;
+	double shrt = 7.5;
+	double lng = 30;
+	boolean dead = false;
+	Health health;
 
-    public Player(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
-        super(x, y, left, right, top, bottom, bounce);
-
+	public Player(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
+		super(x, y, left, right, top, bottom, bounce);
+		health = new Health(100);
         xPoints[0] =x- 5;
         xPoints[1] =x;
         xPoints[2] =x+ 5;

@@ -7,13 +7,13 @@ public class Laser {
 	double atkWidth;
 	double width;
 	boolean fire = false;
-	Color color;
+	Color color = Color.BLACK;
 	double x1;
 	double y1;
 	double x2;
 	double y2;
 	
-	public Laser(double x1, double y1, double x2, double y2, double width, Color colour) {
+	public Laser(double x1, double y1, double x2, double y2, double width, Color color) {
 		this.width = width;
 		atkWidth = width;
 		this.color = color;
@@ -35,7 +35,7 @@ public class Laser {
 	}
 
 	public void animateOneStep() {
-		width -= 0.5;
+		width -= 0.25;
 	}
 
 }
