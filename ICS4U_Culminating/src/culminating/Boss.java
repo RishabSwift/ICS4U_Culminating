@@ -13,23 +13,23 @@ public class Boss extends MovingObject {
 
 	int stgNum = 1;
 	int radius;
-	double cx;
-	double cy;
+	double cornerX;
+	double cornerY;
 	double speed;
 	Health health;
 	boolean attacking;
 	ArrayList<Bullet> bullet = new  ArrayList<Bullet>();
 	ArrayList<Laser> laser = new  ArrayList<Laser>();
 	int timeCount = 0;
-	int coneCount = 0;
+	int coneShotCount = 0;
 	boolean laserAtk = false;
 	boolean coneAtk = false;
 
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
 		radius = 30;
-		this.cx = x - radius;
-		this.cy = y - radius;
+		this.cornerX = x - radius;
+		this.cornerY = y - radius;
 		health = new Health(100);
 		switch 	(stgNum) {
 		case 1: color = Color.PURPLE;
@@ -65,11 +65,14 @@ public class Boss extends MovingObject {
 	}
 
 	@Override
+	/**
+	 * draws the Boss on the canvas
+	 */
 	public void draw(GraphicsContext gc) {
-		cx = playerLocationX - radius;
-		cy = playerLocationY - radius;
-		int drawX = (int) cx;
-		int drawY = (int) cy;
+		cornerX = x - radius;
+		cornerY = y - radius;
+		int drawX = (int) cornerX;
+		int drawY = (int) cornerY;
 		gc.setFill(color);
 		gc.fillOval(drawX, drawY, radius * 2, radius * 2);
 		//gc.fillText("" + coneCount, 10, 30);
@@ -77,23 +80,29 @@ public class Boss extends MovingObject {
 
 		//				gc.setStroke(color.BLACK);
 		//				gc.setLineWidth(5);
-		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX + 10000, playerLocationY);
-		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX - 10000, playerLocationY);
-		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY + 10000);
-		//				gc.strokeLine(playerLocationX, playerLocationY, playerLocationX, playerLocationY - 10000);
-
-
+		//				gc.strokeLine(x, y, x + 10000, y);
+		//				gc.strokeLine(x, y, x - 10000, y);
+		//				gc.strokeLine(x, y, x, y + 10000);
+		//				gc.strokeLine(x, y, x, y - 10000);
 
 	}
 
+	/**
+	 * determines the boss behavior
+	 * @param playerX the x coordinant of the player
+	 * @param playerY the y coordinant of the player
+	 */
 	public void behavior(double playerX, double playerY) {
 		timeCount++;
 		atkBehavior(playerX, playerY);		
-		movtBehavior(playerX, playerY);
-
+		movementBehavior(playerX, playerY);
 	}
-
-	public void movtBehavior(double playerX, double playerY) {
+	/**
+	 * determines the boss movement behavior
+	 * @param playerX the x coordinant of the player
+	 * @param playerY the y coordinant of the player
+	 */
+	public void movementBehavior(double playerX, double playerY) {
 		if (laserAtk || coneAtk) {
 			xSpeed = 0;
 			ySpeed = 0;
@@ -129,6 +138,11 @@ public class Boss extends MovingObject {
 		}
 	}
 
+	/**
+	 * determines the attack pattern the boss uses
+	 * @param playerX the x coordinant of the player
+	 * @param playerY the y coordinant of the player
+	 */
 	public void atkBehavior(double playerX, double playerY) {
 		switch 	(stgNum) {
 		case 1:
@@ -208,11 +222,17 @@ public class Boss extends MovingObject {
 	}
 
 	@Override
+	/**
+	 * animation for the boss
+	 */
 	public void animateOneStep() {
 		//TODO boss moving graphics
 
 	}
 
+	/**
+	 * resets the boss for the next level of the game
+	 */
 	public void nextLv() {
 		for (int i = bullet.size() -1; i > 0; i--) {
 			bullet.remove(i);
@@ -238,11 +258,16 @@ public class Boss extends MovingObject {
 		}
 	}
 
+	/**
+	 * shoots bullets in at angles around the boss
+	 * @param angle the angle between the bullet vectors
+	 * @param bounce whether or not the bullet will bounce on collision with the edge of the canvas
+	 */
 	public void atk1(double angle, boolean bounce) {
 		//balls in many directions
 		for (int i = 0; i < 360; i++) {
 			if (i % angle == 0) {
-				Bullet bu = new Bullet(playerLocationX, playerLocationY, left, right, top, bottom, bounce);
+				Bullet bu = new Bullet(x, y, left, right, top, bottom, bounce);
 
 				if (angle > 45 && angle < 135  ||  angle > 225 && angle < 315) {
 					bu.ySpeed = Math.cos(Math.toRadians(i)) * 10;
@@ -258,17 +283,26 @@ public class Boss extends MovingObject {
 		}
 	}
 
-	public void atk2(int projectileType, double tx, double ty, int shots, double anglewidth, boolean bounce) {
+	/**
+	 * attacks in a cone directed towards the character
+	 * @param projectileType the type of attack cone; laser or projectile
+	 * @param playerX the x location of the player
+	 * @param playerY the y location of the player
+	 * @param shots the number of shots to be made in the cone attack
+	 * @param anglewidth the angle width of the cone
+	 * @param bounce whether or not the bullet will bounce on collision with the edge of the canvas
+	 */
+	public void atk2(int projectileType, double playerX, double playerY, int shots, double anglewidth, boolean bounce) {
 		if (!coneAtk) {
-			coneCount = shots;
+			coneShotCount = shots;
 			coneAtk = true;
 		}
-		else if (coneCount > 0) {
+		else if (coneShotCount > 0) {
 			if (projectileType == 1) {
-				coneCount--;
-				Bullet bu = new Bullet(cx, cy, left, right, top, bottom, bounce);
-				double xdist = tx-playerLocationX;
-				double ydist = ty-playerLocationY;
+				coneShotCount--;
+				Bullet bu = new Bullet(cornerX, cornerY, left, right, top, bottom, bounce);
+				double xdist = playerX-x;
+				double ydist = playerY-y;
 				double m = ydist/xdist;
 				double angle = Math.toDegrees(Math.atan(m));
 				double endx = 0;
@@ -290,9 +324,9 @@ public class Boss extends MovingObject {
 				bullet.add(bu);
 			}
 			else {
-				coneCount--;
-				double xdist = tx-playerLocationX;
-				double ydist = ty-playerLocationY;
+				coneShotCount--;
+				double xdist = playerX-x;
+				double ydist = playerY-y;
 				double m = ydist/xdist;
 				double angle = Math.toDegrees(Math.atan(m));
 				double endx = 0;
@@ -305,10 +339,10 @@ public class Boss extends MovingObject {
 				}
 				angle += (Math.random()*anglewidth) - anglewidth/2;
 
-				endx = playerLocationX + 10000 * Math.cos(Math.toRadians(angle));
-				endy = playerLocationY + 10000 * Math.sin(Math.toRadians(angle));
+				endx = x + 10000 * Math.cos(Math.toRadians(angle));
+				endy = y + 10000 * Math.sin(Math.toRadians(angle));
 
-				Laser l = new Laser(playerLocationX,playerLocationY,endx, endy, 20, this.color);
+				Laser l = new Laser(x,y,endx, endy, 20, this.color);
 				laser.add(l);
 			}
 			//cone attack
@@ -318,30 +352,36 @@ public class Boss extends MovingObject {
 		}
 	}
 
-	public void atk3(double tx, double ty) {
+	/**
+	 * makes a laser attack at the player
+	 * @param playerX the x location of the player
+	 * @param playerY the y location of the player
+	 */
+	public void atk3(double playerX, double playerY) {
 		laserAtk = true;
-		//line laser
-		double xdist = tx- playerLocationX;
-		double ydist = ty- playerLocationY;
-		double m = ydist/xdist;
-		double angle = Math.toDegrees(Math.atan(m));
-		double endx = 0;
-		double endy = 0;
+		double xdist = playerX- x;
+		double ydist = playerY- y;
+		double laserSlope = ydist/xdist;
+		double angle = Math.toDegrees(Math.atan(laserSlope));
+		double laserEndXValue = 0;
+		double laserEndYValue = 0;
 		if (angle < 0) {
 			angle += 360;
 		}
 		if (xdist < 0) {
 			angle += 180;
 		}
-		endx = playerLocationX + 10000 * Math.cos(Math.toRadians(angle));
-		endy = playerLocationY + 10000 * Math.sin(Math.toRadians(angle));
+		laserEndXValue = x + 10000 * Math.cos(Math.toRadians(angle));
+		laserEndYValue = y + 10000 * Math.sin(Math.toRadians(angle));
 
-		Laser l = new Laser(playerLocationX,playerLocationY,endx, endy, 20, this.color);
+		Laser l = new Laser(x,y,laserEndXValue, laserEndYValue, 20, this.color);
 		laser.add(l);
 
 	}
 
-
+	/**
+	 * sets the boss to move in a random direction
+	 */
 	public void move1() {
 		//random movement
 		xSpeed = (speed - (Math.random() * 20));

@@ -3,15 +3,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
- * Superclass for a generic moving object. This class takes care of the playerLocationX and playerLocationY
- * location (should be the centre of the object), the playerLocationX and playerLocationY speed, the color,
+ * Superclass for a generic moving object. This class takes care of the x and y
+ * location (should be the centre of the object), the x and y speed, the color,
  * and the top, bottom, left, and right edges of the screen. <br>
  * <br>
  * 
  * The class implements a thread that updates the objects' position every 10 ms
- * (by default). At each step, the playerLocationX and playerLocationY position are updated based on the playerLocationX
- * and playerLocationY speed. Then collisions with the edge of the screen are checked, and the
- * playerLocationX and playerLocationY speeds are reversed if necessary.<br>
+ * (by default). At each step, the x and y position are updated based on the x
+ * and y speed. Then collisions with the edge of the screen are checked, and the
+ * x and y speeds are reversed if necessary.<br>
  * <br>
  * 
  * The class also calls animateOneStep() for each update. If the object designer
@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
  * object, causing it to morph in some way as it moves.<br>
  * <br>
  * 
- * <b>Requirements:</b> Object designers must create a subclass of
+ * <boss>Requirements:</boss> Object designers must create a subclass of
  * MovingObject. They must make use the MovingObject constructor (or no thread
  * will start). They must implement the draw() and animateOneStep() methods.<br>
  * <br>
@@ -31,19 +31,19 @@ import javafx.scene.paint.Color;
 public abstract class MovingObject implements Runnable {
 
 	/**
-	 * The playerLocationX location of the object.
+	 * The x location of the object.
 	 */
-	double playerLocationX;
+	double x;
 	/**
-	 * The playerLocationY location of the object.
+	 * The y location of the object.
 	 */
-	double playerLocationY;
+	double y;
 	/**
-	 * The playerLocationX speed of the object.
+	 * The x speed of the object.
 	 */
 	double xSpeed;
 	/**
-	 * The playerLocationY speed of the object.
+	 * The y speed of the object.
 	 */
 	double ySpeed;
 	/**
@@ -84,9 +84,9 @@ public abstract class MovingObject implements Runnable {
 	 * thread. Every subclass of MovingObject must use this constructor.
 	 * 
 	 * @param x
-	 *            Initial playerLocationX position.
+	 *            Initial x position.
 	 * @param y
-	 *            Initial playerLocationY position.
+	 *            Initial y position.
 	 * @param left
 	 *            Left edge for bouncing.
 	 * @param right
@@ -102,8 +102,8 @@ public abstract class MovingObject implements Runnable {
 		this.xSpeed = 0;
 		this.ySpeed = 0;
 		this.color = Color.BLACK;
-		this.playerLocationX = x;
-		this.playerLocationY = y;
+		this.x = x;
+		this.y = y;
 		this.left = left;
 		this.right = right;
 		this.top = top;
@@ -129,14 +129,14 @@ public abstract class MovingObject implements Runnable {
 	}
 
 	/**
-	 * Updates the playerLocationX and playerLocationY values in an infinite loop. If object hits an edge, playerLocationX
-	 * or playerLocationY speed is reversed as appropriate.
+	 * Updates the x and y values in an infinite loop. If object hits an edge, x
+	 * or y speed is reversed as appropriate.
 	 */
 	public void run() {
 		while (moving) {
-			playerLocationX += xSpeed;
-			playerLocationY += ySpeed;
-			if (playerLocationX >= right | playerLocationX <= left) {
+			x += xSpeed;
+			y += ySpeed;
+			if (x >= right | x <= left) {
 				if (bounce) {
 					xSpeed *= -1;
 				}
@@ -144,7 +144,7 @@ public abstract class MovingObject implements Runnable {
 					edge = true;
 				}
 			}
-			if (playerLocationY >= bottom | playerLocationY <= top) {
+			if (y >= bottom | y <= top) {
 				if (bounce) {
 					ySpeed *= -1;
 				}
@@ -173,43 +173,43 @@ public abstract class MovingObject implements Runnable {
 	abstract public void animateOneStep();
 
 	/**
-	 * Sets the playerLocationX speed.
+	 * Sets the x speed.
 	 * 
 	 * @param xSpeed
-	 *            New playerLocationX speed.
+	 *            New x speed.
 	 */
 	public void setXSpeed(double xSpeed) {
 		this.xSpeed = xSpeed;
 	}
 
 	/**
-	 * Sets the playerLocationY speed.
+	 * Sets the y speed.
 	 * 
 	 * @param ySpeed
-	 *            New playerLocationY speed.
+	 *            New y speed.
 	 */
 	public void setYSpeed(double ySpeed) {
 		this.ySpeed = ySpeed;
 	}
 
 	/**
-	 * Sets the playerLocationX location.
+	 * Sets the x location.
 	 * 
 	 * @param x
-	 *            New playerLocationX location.
+	 *            New x location.
 	 */
 	public void setX(int x) {
-		this.playerLocationX = x;
+		this.x = x;
 	}
 
 	/**
-	 * Sets the playerLocationY location.
+	 * Sets the y location.
 	 * 
 	 * @param y
-	 *            New playerLocationY location.
+	 *            New y location.
 	 */
 	public void setY(int y) {
-		this.playerLocationY = y;
+		this.y = y;
 	}
 
 	/**

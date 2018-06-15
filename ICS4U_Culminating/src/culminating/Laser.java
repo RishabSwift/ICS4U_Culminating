@@ -4,9 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Laser {
-	double atkWidth;
+	double laserAttackWidth;
 	double width;
-	boolean fire = false;
+	boolean hasFired = false;
 	Color color = Color.BLACK;
 	double x1;
 	double y1;
@@ -15,7 +15,7 @@ public class Laser {
 	
 	public Laser(double x1, double y1, double x2, double y2, double width, Color color) {
 		this.width = width;
-		atkWidth = width;
+		laserAttackWidth = width;
 		this.color = color;
 		this.x1 = x1;
 		this.x2 = x2;
@@ -28,9 +28,9 @@ public class Laser {
 		gc.setLineWidth(width);
 		gc.strokeLine(x1, y1, x2, y2);
 		animateOneStep();
-		if (width < 0 && !fire) {
-			width = atkWidth;
-			fire = true;
+		if (width < 0 && !hasFired) {
+			width = laserAttackWidth;
+			hasFired = true;
 		}
 	}
 

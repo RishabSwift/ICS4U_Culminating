@@ -10,8 +10,8 @@ public class Player extends MovingObject{
 	double[] yPoints = new double[3];
 	double mouseLocationX;
 	double mouseLocationY;
-	double shrt = 7.5;
-	double lng = 30;
+	double playerWidth = 7.5;
+	double playerHeight = 30;
 	boolean dead = false;
 	Health health;
 
@@ -40,64 +40,64 @@ public class Player extends MovingObject{
      */
     public void draw(GraphicsContext gc) {
 
-        double xdiff = mouseLocationX - playerLocationX;
-        double ydiff = mouseLocationY - playerLocationY;
+        double xdiff = mouseLocationX - x;
+        double ydiff = mouseLocationY - y;
 
         double angle = Math.atan(ydiff/xdiff);
 
 
         if (xdiff == 0) {
-            xPoints[0] = playerLocationX - shrt;
-            xPoints[1] = playerLocationX;
-            xPoints[2] = playerLocationX + shrt;
+            xPoints[0] = x - playerWidth;
+            xPoints[1] = x;
+            xPoints[2] = x + playerWidth;
 
-            yPoints[0] = playerLocationY;
-            yPoints[1] = playerLocationY + lng;
-            yPoints[2] = playerLocationY;
+            yPoints[0] = y;
+            yPoints[1] = y + playerHeight;
+            yPoints[2] = y;
         }
-        //q 1
+        //cartesian quadrant 1
         if (xdiff > 0 && ydiff < 0) {
 
-            xPoints[0] = playerLocationX - shrt * Math.cos(angle + (Math.PI/2));
-            xPoints[1] = playerLocationX + lng * Math.cos(angle);
-            xPoints[2] = playerLocationX + shrt * Math.cos(angle + (Math.PI/2));
+            xPoints[0] = x - playerWidth * Math.cos(angle + (Math.PI/2));
+            xPoints[1] = x + playerHeight * Math.cos(angle);
+            xPoints[2] = x + playerWidth * Math.cos(angle + (Math.PI/2));
 
-            yPoints[0] = playerLocationY - shrt * Math.sin(angle + (Math.PI/2));
-            yPoints[1] = playerLocationY + lng * Math.sin(angle);
-            yPoints[2] = playerLocationY + shrt * Math.sin(angle + (Math.PI/2));
+            yPoints[0] = y - playerWidth * Math.sin(angle + (Math.PI/2));
+            yPoints[1] = y + playerHeight * Math.sin(angle);
+            yPoints[2] = y + playerWidth * Math.sin(angle + (Math.PI/2));
         }
-        //q 4
+        //cartesian quadrant 4
         if (xdiff > 0 && ydiff > 0) {
 
-            xPoints[0] = playerLocationX + shrt * Math.cos(angle - (Math.PI/2));
-            xPoints[1] = playerLocationX + lng * Math.cos(angle);
-            xPoints[2] = playerLocationX + shrt * Math.cos(angle + (Math.PI/2));
+            xPoints[0] = x + playerWidth * Math.cos(angle - (Math.PI/2));
+            xPoints[1] = x + playerHeight * Math.cos(angle);
+            xPoints[2] = x + playerWidth * Math.cos(angle + (Math.PI/2));
 
-            yPoints[0] = playerLocationY + shrt * Math.sin(angle - (Math.PI/2));
-            yPoints[1] = playerLocationY + lng * Math.sin(angle);
-            yPoints[2] = playerLocationY + shrt * Math.sin(angle + (Math.PI/2));
+            yPoints[0] = y + playerWidth * Math.sin(angle - (Math.PI/2));
+            yPoints[1] = y + playerHeight * Math.sin(angle);
+            yPoints[2] = y + playerWidth * Math.sin(angle + (Math.PI/2));
         }
-        //q 2
+        //cartesian quadrant 2
         if (xdiff < 0 && ydiff < 0) {
 
-            xPoints[0] = playerLocationX + shrt * Math.cos(angle + (-Math.PI/2));
-            xPoints[1] = playerLocationX - lng * Math.cos(angle);
-            xPoints[2] = playerLocationX + shrt * Math.cos(angle + (Math.PI/2));
+            xPoints[0] = x + playerWidth * Math.cos(angle + (-Math.PI/2));
+            xPoints[1] = x - playerHeight * Math.cos(angle);
+            xPoints[2] = x + playerWidth * Math.cos(angle + (Math.PI/2));
 
-            yPoints[0] = playerLocationY + shrt * Math.sin(angle + (-Math.PI/2));
-            yPoints[1] = playerLocationY - lng * Math.sin(angle);
-            yPoints[2] = playerLocationY + shrt * Math.sin(angle + (Math.PI/2));
+            yPoints[0] = y + playerWidth * Math.sin(angle + (-Math.PI/2));
+            yPoints[1] = y - playerHeight * Math.sin(angle);
+            yPoints[2] = y + playerWidth * Math.sin(angle + (Math.PI/2));
         }
-        // q 3
+        //cartesian quadrant 3
         if (xdiff < 0 && ydiff > 0) {
 
-            xPoints[0] = playerLocationX + shrt * Math.cos(angle + (Math.PI/2));
-            xPoints[1] = playerLocationX - lng * Math.cos(angle);
-            xPoints[2] = playerLocationX - shrt * Math.cos(angle + (Math.PI/2));
+            xPoints[0] = x + playerWidth * Math.cos(angle + (Math.PI/2));
+            xPoints[1] = x - playerHeight * Math.cos(angle);
+            xPoints[2] = x - playerWidth * Math.cos(angle + (Math.PI/2));
 
-            yPoints[0] = playerLocationY + shrt * Math.sin(angle + (Math.PI/2));
-            yPoints[1] = playerLocationY - lng * Math.sin(angle);
-            yPoints[2] = playerLocationY - shrt * Math.sin(angle + (Math.PI/2));
+            yPoints[0] = y + playerWidth * Math.sin(angle + (Math.PI/2));
+            yPoints[1] = y - playerHeight * Math.sin(angle);
+            yPoints[2] = y - playerWidth * Math.sin(angle + (Math.PI/2));
         }
 
 

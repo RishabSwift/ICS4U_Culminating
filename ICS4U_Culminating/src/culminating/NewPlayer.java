@@ -18,19 +18,19 @@ public class NewPlayer  implements  Runnable{
 
 
     /**
-     * The playerLocationX location of the object.
+     * The x location of the object.
      */
     double playerLocationX;
     /**
-     * The playerLocationY location of the object.
+     * The y location of the object.
      */
     double playerLocationY;
     /**
-     * The playerLocationX speed of the object.
+     * The x speed of the object.
      */
     double xSpeed;
     /**
-     * The playerLocationY speed of the object.
+     * The y speed of the object.
      */
     double ySpeed;
     /**
@@ -100,40 +100,40 @@ public class NewPlayer  implements  Runnable{
     }
 
     /**
-     * Sets the playerLocationX speed.
+     * Sets the x speed.
      *
      * @param xSpeed
-     *            New playerLocationX speed.
+     *            New x speed.
      */
     public void setXSpeed(double xSpeed) {
         this.xSpeed = xSpeed;
     }
 
     /**
-     * Sets the playerLocationY speed.
+     * Sets the y speed.
      *
      * @param ySpeed
-     *            New playerLocationY speed.
+     *            New y speed.
      */
     public void setYSpeed(double ySpeed) {
         this.ySpeed = ySpeed;
     }
 
     /**
-     * Sets the playerLocationX location.
+     * Sets the x location.
      *
      * @param x
-     *            New playerLocationX location.
+     *            New x location.
      */
     public void setX(int x) {
         this.playerLocationX = x;
     }
 
     /**
-     * Sets the playerLocationY location.
+     * Sets the y location.
      *
      * @param y
-     *            New playerLocationY location.
+     *            New y location.
      */
     public void setY(int y) {
         this.playerLocationY = y;
