@@ -8,7 +8,11 @@ import javax.sound.sampled.Clip;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
+/**
+ * Boss.java
+ * This class will store data and create a boss.
+ * June 18, 2018
+ */
 public class Boss extends MovingObject {
 
 	int stgNum = 1;
@@ -24,7 +28,22 @@ public class Boss extends MovingObject {
 	int coneShotCount = 0;
 	boolean laserAtk = false;
 	boolean coneAtk = false;
-
+	
+	/**
+	 * Constructs a new boss that stores information.
+	 * @param x
+	 *            Initial x position.
+	 * @param y
+	 *            Initial y position.
+	 * @param left
+	 *            Left edge for bouncing.
+	 * @param right
+	 *            Right edge for bouncing.
+	 * @param top
+	 *            Top edge for bouncing.
+	 * @param bottom
+	 *            Bottom edge for bouncing.
+	 */
 	public Boss(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
 		radius = 30;
@@ -34,23 +53,8 @@ public class Boss extends MovingObject {
 		switch 	(stgNum) {
 		case 1: color = Color.PURPLE;
 		speed = 10;
-		/*try {
-			Clip theme = AudioSystem.getClip();
-			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
-			theme.start();
-			theme.stop();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}*/
 		return;
 		case 2: color = Color.BLUE;
-		/*try {
-			Clip theme = AudioSystem.getClip();
-			theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
-			theme.start();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}*/
 		speed = 10;
 		return;
 		case 3: color = Color.GREEN;

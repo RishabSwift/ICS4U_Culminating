@@ -2,9 +2,12 @@ package culminating;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-
+/**
+ * Player.java
+ * This class will store data and create a player.
+ * June 18, 2018
+ */
 public class Player extends MovingObject{
-
 	int base;
 	double[] xPoints = new double[3];
 	double[] yPoints = new double[3];
@@ -14,7 +17,22 @@ public class Player extends MovingObject{
 	double playerHeight = 30;
 	boolean dead = false;
 	Health health;
-
+	
+	/**
+	 * Constructs a new Player that stores information.
+	* @param x
+	 *            Initial x position.
+	 * @param y
+	 *            Initial y position.
+	 * @param left
+	 *            Left edge for bouncing.
+	 * @param right
+	 *            Right edge for bouncing.
+	 * @param top
+	 *            Top edge for bouncing.
+	 * @param bottom
+	 *            Bottom edge for bouncing.
+	 */
 	public Player(double x, double y, int left, int right, int top, int bottom, boolean bounce) {
 		super(x, y, left, right, top, bottom, bounce);
 		health = new Health(100);

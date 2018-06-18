@@ -6,7 +6,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+/**
+ * MainStage.java
+ * This class will load the main stage.
+ * June 18, 2018
+ */
 public class MainStage extends Stage {
 
     public MainStage() throws IOException {

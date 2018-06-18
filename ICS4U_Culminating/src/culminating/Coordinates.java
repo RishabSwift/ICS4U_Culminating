@@ -1,5 +1,9 @@
 package culminating;
-
+/**
+ * Coordinates.java
+ * This class will store data and create a coordinates object.
+ * June 18, 2018
+ */
 public class Coordinates {
 
     private double x;
@@ -9,19 +13,6 @@ public class Coordinates {
         super();
         this.setX(x);
         this.setY(y);
-        //this.setTimer(timer);
-			/*if (timer < 5) {
-				xCoordinates.add(x);
-				yCoordinates.add(y);
-			}
-			else {
-				Barrier barrier = new Barrier (xCoordinates, yCoordinates);
-				xCoordinates.clear();
-				yCoordinates.clear();
-				//barrier.draw(gc);
-			}
-
-			*/
     }
 
     public void setX (double x) {

@@ -1,5 +1,9 @@
 package culminating;
-
+/**
+ * Timer.java
+ * This class will store data and create a timer.
+ * June 18, 2018
+ */
 public class Timer {
 
     private long currentTime;
@@ -20,7 +24,11 @@ public class Timer {
     public void startTimer() {
         oldTime = System.currentTimeMillis();
     }
-
+/**
+ * 
+ * @param seconds the number of seconds elapsed.
+ * @return
+ */
     public boolean hasBeenSeconds(int seconds) {
         getCurrentTime();
         if (currentTime - oldTime > seconds * 1000) {

@@ -5,10 +5,7 @@ import javafx.scene.paint.Color;
 
 /**
  * This class implements a flashing bullet. Feel free to change this, implement a
- * new object, change the animation, etc. <br><br>December 9, 2007.
- * 
- * @author Sam Scott
- * 
+ * new object, change the animation, etc.
  */
 public class PBullet extends MovingObject {
 	/**

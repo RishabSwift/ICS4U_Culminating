@@ -26,6 +26,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * GameStage.java
+ * This class will store data and create the stage.
+ * June 18, 2018
+ */
 public class GameStage extends Stage {
 
 	/**
@@ -46,8 +51,8 @@ public class GameStage extends Stage {
 	 */
 	//Canvas canvas;
 	//GraphicsContext gc;
-	int timer = 0;
-	long currentTime = 0;
+	int timer = 0; //Timer for barrier.
+	long currentTime = 0; //Time that has elapsed.
 	boolean win = false;
 	Bullet[] bullet = new Bullet[numBalls];
 	ArrayList<PBullet> pbullet = new ArrayList<PBullet>();
@@ -60,7 +65,7 @@ public class GameStage extends Stage {
 	ProgressBar bossHealthProgress;
 	ProgressBar playerHealthProgress;
 
-	Clip opening = null, boss1 = null, boss2 = null, boss3 = null, boss4 = null, boss5 = null, boss6 = null;
+	Clip boss1 = null, boss2 = null, boss3 = null, boss4 = null, boss5 = null, boss6 = null; //Initializing sounds.
 
 	Timer t = new Timer();
 
@@ -112,13 +117,14 @@ public class GameStage extends Stage {
 		playerHealthBossProgressTaskService.start();
 
 	}
-
+	/**
+	 * Starts the game.
+	 * @param canvas
+	 * @param gc
+	 */
 	public void startGame(Canvas canvas, GraphicsContext gc) {
 
 		try {
-			//opening = AudioSystem.getClip();
-			//opening.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/Aladdin - Genesis - Boss Tune.wav"))); //opens the given file for the clip
-			//opening.start();
 			boss1 = AudioSystem.getClip();
 			boss1.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/sonic_boss_theme.wav"))); //opens the given file for the clip
 			boss1.start();
@@ -148,7 +154,7 @@ public class GameStage extends Stage {
 		//Create the Player
 		player = new Player(500, 500, 0, (int) canvas.getWidth(), 0, (int) canvas.getHeight(), true);
 
-		//moves the player based on the key pressed
+		//moves the player based on the key pressed.
 		canvas.setOnKeyPressed(event -> {
 			if (event.getCode() == KeyCode.W) {
 				player.setYSpeed(-10);
@@ -164,7 +170,7 @@ public class GameStage extends Stage {
 			}
 		});
 
-		//stops the player's movemen when the corresponding key is released
+		//stops the player's movement when the corresponding key is released.
 		canvas.setOnKeyReleased(event -> {
 			if (event.getCode() == KeyCode.W) {
 				player.setYSpeed(0);
@@ -180,21 +186,21 @@ public class GameStage extends Stage {
 			}
 		});
 
-		//changes the coordinants of the mouse in the canvas when it is moved.
+		//changes the coordinates of the mouse in the canvas when it is moved.
 		canvas.setOnMouseMoved(event -> {
 			player.mouseLocationX = event.getX();
 			player.mouseLocationY = event.getY();
 		});
 
 		/**
-		 * player attacks
+		 * player shoots.
 		 */
 		canvas.setOnMouseClicked(event -> {
-			if (pbullet.size() < 5) {
+			if (pbullet.size() < 5) { //Player can shoot 5 bullets at a time.
 				try {
 					Clip theme = AudioSystem.getClip();
 					theme.open(AudioSystem.getAudioInputStream(new File("src/assets/sounds/fire2.wav"))); //opens the given file for the clip
-					theme.start();
+					theme.start(); //Sound for shooting is played.
 
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -228,7 +234,9 @@ public class GameStage extends Stage {
 			isBarrierBeingCreated = true;
 
 		});
-
+		/**
+		 * Starts timer is barrier is not created.
+		 */
 		canvas.setOnMouseReleased(event -> {
 			if (!isBarrierCreated && isBarrierBeingCreated) {
 				t.startTimer();
@@ -246,17 +254,15 @@ public class GameStage extends Stage {
 			@Override
 			public void run() {
 				while (!finished) {
-
-
 					if (isBarrierCreated) {
-						if (t.hasBeenSeconds(3)) {
+						if (t.hasBeenSeconds(3)) { //Clears barrier after 3 seconds.
 							isBarrierCreated = false;
 							isBarrierBeingCreated = false;
 							barrier.clear();
 						}
 					}
 					if (player.health.isDead()) {
-						finished = true;
+						finished = true; //Game is finished if player health is zero.
 					}
 					if (boss.health.isDead()) {
 						if (boss.stgNum == 6) {
@@ -267,7 +273,7 @@ public class GameStage extends Stage {
 						}
 					}
 					if (boss.stgNum == 4) {
-						player.setColor(Color.WHITE);
+						player.setColor(Color.WHITE); //Different colour for different stage.
 					} else {
 						player.setColor(Color.BLACK);
 					}
@@ -320,23 +326,22 @@ public class GameStage extends Stage {
 		boss.setY(100);
 		player.setX(500);
 		player.setX(500);
-		//        if (boss.stgNum == 2) {
-		//            boss1.stop();
-		//            boss2.start();
-		//        } else if (boss.stgNum == 3) {
-		//            boss2.stop();
-		//            boss3.start();
-		//        } else if (boss.stgNum == 4) {
-		//            boss3.stop();
-		//            boss4.start();
-		//        } else if (boss.stgNum == 5) {
-		//            boss4.stop();
-		//            boss5.start();
-		//        } else if (boss.stgNum == 6) {
-		//            boss5.stop();
-		//            boss6.start();
-		//        }
-
+		if (boss.stgNum == 2) {
+		boss1.stop();
+		boss2.start();
+		} else if (boss.stgNum == 3) {
+	boss2.stop();
+		boss3.start();
+		} else if (boss.stgNum == 4) {
+		boss3.stop();
+		boss4.start();
+		} else if (boss.stgNum == 5) {
+		boss4.stop();
+		boss5.start();
+		} else if (boss.stgNum == 6) {
+		boss5.stop();
+		boss6.start();
+		}
 		resetBossHealth();
 	}
 
@@ -356,7 +361,6 @@ public class GameStage extends Stage {
 	 * detects whether the player or the boss has been hit by an attack
 	 */
 	public void hitDetection() {
-		//TODO Rishab change the hit detection to fit graphics
 		// player bullet hits boss
 		for (int i = 0; i < pbullet.size(); i++) {
 			double xdif = pbullet.get(i).cx - boss.x;
@@ -409,7 +413,22 @@ public class GameStage extends Stage {
 				}
 			}
 		}
-
+		// boss bullet hits barrier
+				for (int i = 0; i < boss.bullet.size(); i++) {
+					for(int j = 0; j < barrier.c.size(); j++) {
+						double xdif = boss.bullet.get(i).x - barrier.c.get(j).getX();// p.xPoints[0];
+						double ydif = boss.bullet.get(i).y - barrier.c.get(j).getY();//p.yPoints[0];
+						double rad = boss.bullet.get(i).radius;
+						if (Math.abs(xdif) <= rad && Math.abs(ydif) <= rad) {
+							boss.bullet.remove(i);
+							return;
+							//barrier.clear();
+							//p.setColor(Color.WHITE);
+							//p.moving = false;
+							//p.dead = true;
+						}
+					}
+				}
 		// boss bullet hits player
 		for (int i = 0; i < boss.bullet.size(); i++) {
 			double xdif = boss.bullet.get(i).x - player.xPoints[0];
@@ -507,7 +526,11 @@ public class GameStage extends Stage {
 		}
 	}
 
-
+/**
+ * Fills text on screen.
+ * @param text
+ * @param gc
+ */
 	private void fillScreenWithText(String text, GraphicsContext gc) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());

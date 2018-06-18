@@ -1,5 +1,9 @@
 package culminating;
-
+/**
+ * Health.java
+ * This class will store health for the boss and player.
+ * June 18, 2018
+ */
 public class Health {
 
     int health;

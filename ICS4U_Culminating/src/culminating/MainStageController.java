@@ -8,7 +8,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
+/**
+ * MainStageController.java
+ * This class will create the main menu.
+ * June 18, 2018
+ */
 public class MainStageController {
 
     @FXML
