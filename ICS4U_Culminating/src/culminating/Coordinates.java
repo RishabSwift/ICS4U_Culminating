@@ -1,4 +1,5 @@
 package culminating;
+
 /**
  * Coordinates.java
  * This class will store data and create a coordinates object.
@@ -15,18 +16,21 @@ public class Coordinates {
         this.setY(y);
     }
 
-    public void setX (double x) {
+    public void setX(double x) {
         this.x = x;
     }
-    public void setY (double y) {
+
+    public void setY(double y) {
         this.y = y;
     }
+
     public double getX() {
         return x;
     }
+
     public double getY() {
         return y;
     }
-    
+
 
 }

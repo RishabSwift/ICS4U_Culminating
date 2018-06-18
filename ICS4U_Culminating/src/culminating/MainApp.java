@@ -13,10 +13,15 @@ public class MainApp extends Application {
     public static int GAME_WIDTH = 1280;
     public static int GAME_HEIGHT = 800;
 
+    /**
+     * Launch the main application
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-    	launch(args);
+        launch(args);
     }
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         new MainStage();
